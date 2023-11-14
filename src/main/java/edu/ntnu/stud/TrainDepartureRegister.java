@@ -1,4 +1,4 @@
-package org.example;
+package edu.ntnu.stud;
 
 import java.time.LocalTime;
 import java.util.ArrayList;

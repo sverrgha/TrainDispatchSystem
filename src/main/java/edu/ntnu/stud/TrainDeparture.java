@@ -1,4 +1,4 @@
-package org.example;
+package edu.ntnu.stud;
 
 import java.time.LocalTime;
 
@@ -34,20 +34,37 @@ public class TrainDeparture {
   private LocalTime delay;
 
   /**
+   * The track for the train.
+   */
+  private int track;
+
+  /**
    * Constructs a TrainDeparture object.
    *
    * @param line          The line or route of the train.
+   * @param destination   The destination of the train.
    * @param trainNumber   The unique identifier of the train.
    * @param departureTime The scheduled departure time of the train.
    * @param delay         The delay in the departure time, if any.
+   * @param track         The track for the train
    */
-  public TrainDeparture(String destination, String line, int trainNumber,
+  public TrainDeparture(String line, String destination, int trainNumber,
+                        LocalTime departureTime, LocalTime delay, int track) {
+    this.line = line;
+    this.destination = destination;
+    this.trainNumber = trainNumber;
+    this.departureTime = departureTime;
+    this.delay = delay;
+    this.track = track;
+  }
+  public TrainDeparture(String line, String destination, int trainNumber,
                         LocalTime departureTime, LocalTime delay) {
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
     this.departureTime = departureTime;
     this.delay = delay;
+    this.track = -1;
   }
 
   /**
@@ -118,6 +135,14 @@ public class TrainDeparture {
    */
   @Override
   public String toString() {
-    return destination + " | " + line + " | " + trainNumber + " | " + departureTime + " | " + delay;
+    if (track != -1) {
+      return departureTime + " | " + line + " | " + destination + " | " + trainNumber
+              + " | " + delay + " | " + track;
+    }
+    else {
+      return departureTime + " | " + line + " | " + destination + " | " + trainNumber
+              + " | " + delay;
+    }
+
   }
 }
