@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class UserInterface {
+public class UI {
   private TrainDepartureRegister trainDepartureRegister;
   private boolean finished = false;
   private Scanner scanner;
@@ -41,30 +41,21 @@ public class UserInterface {
     int menuChoice = Integer.parseInt(scanner.nextLine());
 
     switch (menuChoice){
-      case 1:
-        printTrainDeparturesList(trainDepartureRegister.sortByDepartureTime());
-        break;
-      case 2:
-        trainDepartureRegister.removeDepartedTrains();
-        break;
+      case 1 -> showTrainDepartures();
+      case 2 -> updateTime();
       case 3 -> registerTrain();
-      case 4:
-        System.out.println("Input train number to search for:");
-        int trainNumber = Integer.parseInt(scanner.nextLine());
-        System.out.println(trainDepartureRegister.findDepartureByTrainNumber(trainNumber));
-        break;
-      case 5:
-        System.out.println("Input your destination:");
-        String destination = scanner.nextLine();
-        printTrainDeparturesList(trainDepartureRegister.findDeparturesByDestination(destination));
-        break;
-      case 9:
-        System.out.println("Thanks for using the Train Dispatch App!");
-        finished = true;
-        break;
+      case 4 -> searchTrainNumber();
+      case 5 -> searchDestination();
+      case 9 -> endProgram();
     }
   }
-  public void registerTrain(){
+  private void showTrainDepartures(){
+    printTrainDeparturesList(trainDepartureRegister.sortByDepartureTime());
+  }
+  private void updateTime(){
+    trainDepartureRegister.removeDepartedTrains();
+  }
+  private void registerTrain(){
     System.out.println("Input line:");
     String line = scanner.nextLine();
     System.out.println("Input destination:");
@@ -78,7 +69,21 @@ public class UserInterface {
     TrainDeparture newTrainDeparture = new TrainDeparture(line, destination, trainNumber, departureTime, delay);
     trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
   }
-  public void printTrainDeparturesList(ArrayList<TrainDeparture> listToBePrinted){
+  private void searchTrainNumber(){
+    System.out.println("Input train number to search for:");
+    int trainNumber = Integer.parseInt(scanner.nextLine());
+    System.out.println(trainDepartureRegister.findDepartureByTrainNumber(trainNumber));
+  }
+  private void searchDestination(){
+    System.out.println("Input your destination:");
+    String destination = scanner.nextLine();
+    printTrainDeparturesList(trainDepartureRegister.findDeparturesByDestination(destination));
+  }
+  private void endProgram(){
+    System.out.println("Thanks for using the Train Dispatch App!");
+    finished = true;
+  }
+  private void printTrainDeparturesList(ArrayList<TrainDeparture> listToBePrinted){
     for(TrainDeparture trainDeparture: listToBePrinted){
       System.out.println(trainDeparture);
     }
