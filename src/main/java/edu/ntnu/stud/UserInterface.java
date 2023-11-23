@@ -1,13 +1,14 @@
 package edu.ntnu.stud;
-import java.util.ArrayList;
+
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserInterface {
   private TrainDepartureRegister trainDepartureRegister;
   private boolean finished = false;
   private Scanner scanner;
-  private int menuChoice;
+
   public void init(){
     trainDepartureRegister = new TrainDepartureRegister();
     scanner = new Scanner(System.in);
@@ -37,7 +38,7 @@ public class UserInterface {
     System.out.println("Please enter a number:");
   }
   public void choice(){
-    menuChoice = Integer.parseInt(scanner.nextLine());
+    int menuChoice = Integer.parseInt(scanner.nextLine());
 
     switch (menuChoice){
       case 1:
@@ -46,9 +47,7 @@ public class UserInterface {
       case 2:
         trainDepartureRegister.removeDepartedTrains();
         break;
-      case 3:
-        registerTrain();
-        break;
+      case 3 -> registerTrain();
       case 4:
         System.out.println("Input train number to search for:");
         int trainNumber = Integer.parseInt(scanner.nextLine());

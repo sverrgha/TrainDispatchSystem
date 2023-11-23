@@ -39,7 +39,7 @@ public class TrainDeparture {
   private int track;
 
   /**
-   * Constructs a TrainDeparture object.
+   * Constructs a TrainDeparture object, if track is specified/decided.
    *
    * @param line          The line or route of the train.
    * @param destination   The destination of the train.
@@ -57,6 +57,16 @@ public class TrainDeparture {
     this.delay = delay;
     this.track = track;
   }
+  /**
+   * Constructs a TrainDeparture object, if track is not specified/decided.
+   *
+   * @param line          The line or route of the train.
+   * @param destination   The destination of the train.
+   * @param trainNumber   The unique identifier of the train.
+   * @param departureTime The scheduled departure time of the train.
+   * @param delay         The delay in the departure time, if any.
+   */
+
   public TrainDeparture(String line, String destination, int trainNumber,
                         LocalTime departureTime, LocalTime delay) {
     this.line = line;
@@ -117,10 +127,15 @@ public class TrainDeparture {
    *
    * @param newDelay The new delay in the departure time.
    */
-  public void setDelay(LocalTime newDelay) {
+  public void setNewDelay(LocalTime newDelay) {
     delay = newDelay;
   }
 
+  /**
+   * Calculates the departure time including delay.
+   *
+   * @return The departure time including the delay.
+   */
   public LocalTime departureTimeWithDelay() {
     LocalTime newTime = departureTime;
     newTime = newTime.plusHours(delay.getHour());
@@ -138,11 +153,9 @@ public class TrainDeparture {
     if (track != -1) {
       return departureTime + " | " + line + " | " + destination + " | " + trainNumber
               + " | " + delay + " | " + track;
-    }
-    else {
+    } else {
       return departureTime + " | " + line + " | " + destination + " | " + trainNumber
               + " | " + delay;
     }
-
   }
 }
