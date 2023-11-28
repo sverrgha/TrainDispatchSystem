@@ -3,6 +3,7 @@ package edu.ntnu.stud;
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class UI {
@@ -130,19 +131,24 @@ public class UI {
     finished = true;
   }
   private void printDisplayOverview(){
-
-    System.out.printf("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n",
-            "Departure time",
-            "Line",
-            "Train number",
-            "Destination",
-            "Track",
-            "Delay");
+    int width = 15;
+    String tableHeader = String.format(("| %-" + width + "s ").repeat(6) + "|",
+            "Departure time:",
+            "Line:",
+            "Train number:",
+            "Destination:",
+            "Track:",
+            "Delay:");
+    System.out.println("|" + "-".repeat(tableHeader.length()-2));
+    System.out.println("|" + "-".repeat(tableHeader.length()/2-3)
+            + time
+            + "-".repeat(tableHeader.length()/2-3) + "|");
+    System.out.println(tableHeader);
+    System.out.println((("| %-" + width + "s ").repeat(6) + "|")
+            .replace("%-" + width + "s", "-".repeat(width)));
   }
-  private void printTrainDeparturesList(ArrayList<TrainDeparture> listToBePrinted){
+  private void printTrainDeparturesList(List<TrainDeparture> listToBePrinted){
     printDisplayOverview();
-    for(TrainDeparture trainDeparture: listToBePrinted){
-      System.out.println(trainDeparture);
-    }
+    listToBePrinted.forEach(System.out::println);
   }
 }

@@ -3,6 +3,8 @@ package edu.ntnu.stud;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a register of train departures.
@@ -23,13 +25,9 @@ public class TrainDepartureRegister {
    * @return true if the train with the same number is already registered, false otherwise.
    */
   public boolean registerTrainDeparture(TrainDeparture newTrainDeparture) {
-    boolean alreadyRegistered = false;
-    for (TrainDeparture trainDeparture : trainDepartures) {
-      if (trainDeparture.getTrainNumber().equals(newTrainDeparture.getTrainNumber())) {
-        alreadyRegistered = true;
-        break;
-      }
-    }
+    boolean alreadyRegistered = trainDepartures.stream()
+            .anyMatch(trainDeparture -> trainDeparture.getTrainNumber()
+                    .equals(newTrainDeparture.getTrainNumber()));
     if (!alreadyRegistered) {
       trainDepartures.add(newTrainDeparture);
     }
@@ -47,12 +45,10 @@ public class TrainDepartureRegister {
    * @return The train departure with the specified train number, or null if not found.
    */
   public TrainDeparture findDepartureByTrainNumber(String trainNumber) {
-    for (TrainDeparture trainDeparture : trainDepartures) {
-      if (trainDeparture.getTrainNumber().equals(trainNumber)) {
-        return trainDeparture;
-      }
-    }
-    return null;
+    return trainDepartures.stream()
+            .filter(trainDeparture -> trainDeparture.getTrainNumber().equals(trainNumber))
+            .findFirst()
+            .orElse(null);
   }
 
   /**
@@ -61,14 +57,11 @@ public class TrainDepartureRegister {
    * @param destination The destination to search for.
    * @return A list of train departures with the specified destination.
    */
-  public ArrayList<TrainDeparture> findDeparturesByDestination(String destination) {
-    ArrayList<TrainDeparture> foundDepartures = new ArrayList<>();
-    for (TrainDeparture trainDeparture : trainDepartures) {
-      if (trainDeparture.getDestination().equalsIgnoreCase(destination)) {
-        foundDepartures.add(trainDeparture);
-      }
-    }
-    return foundDepartures;
+  public List<TrainDeparture> findDeparturesByDestination(String destination) {
+   
+    return trainDepartures.stream()
+            .filter(trainDeparture -> trainDeparture.getDestination().equalsIgnoreCase(destination))
+            .collect(Collectors.toList());
   }
 
   /**
