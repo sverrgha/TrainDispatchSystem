@@ -23,13 +23,21 @@ public class TrainDepartureRegister {
    * @return true if the train with the same number is already registered, false otherwise.
    */
   public boolean registerTrainDeparture(TrainDeparture newTrainDeparture) {
+    boolean alreadyRegistered = false;
     for (TrainDeparture trainDeparture : trainDepartures) {
-      if (trainDeparture.getTrainNumber() == newTrainDeparture.getTrainNumber()) {
-        return true;
+      if (trainDeparture.getTrainNumber().equals(newTrainDeparture.getTrainNumber())) {
+        alreadyRegistered = true;
+        break;
       }
     }
-    trainDepartures.add(newTrainDeparture);
-    return false;
+    if (!alreadyRegistered) {
+      trainDepartures.add(newTrainDeparture);
+    }
+    return alreadyRegistered;
+  }
+
+  public void removeTrainDeparture(String trainNumber){
+    trainDepartures.removeIf(trainDeparture -> trainDeparture.getTrainNumber().equals(trainNumber));
   }
 
   /**
@@ -38,9 +46,9 @@ public class TrainDepartureRegister {
    * @param trainNumber The train number to search for.
    * @return The train departure with the specified train number, or null if not found.
    */
-  public TrainDeparture findDepartureByTrainNumber(int trainNumber) {
+  public TrainDeparture findDepartureByTrainNumber(String trainNumber) {
     for (TrainDeparture trainDeparture : trainDepartures) {
-      if (trainDeparture.getTrainNumber() == trainNumber) {
+      if (trainDeparture.getTrainNumber().equals(trainNumber)) {
         return trainDeparture;
       }
     }
@@ -66,9 +74,9 @@ public class TrainDepartureRegister {
   /**
    * Removes trains that have already departed based on their scheduled departure time with delay.
    */
-  public void removeDepartedTrains() {
+  public void removeDepartedTrains(LocalTime newTime) {
     trainDepartures.removeIf(trainDeparture
-            -> trainDeparture.departureTimeWithDelay().isBefore(LocalTime.now()));
+            -> trainDeparture.departureTimeWithDelay().isBefore(newTime));
   }
 
   /**

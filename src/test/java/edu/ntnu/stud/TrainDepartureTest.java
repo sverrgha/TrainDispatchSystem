@@ -11,7 +11,7 @@ public class TrainDepartureTest {
   @Test
   public void testDepartureTimeWithDelay(){
     TrainDeparture trainDeparture = new TrainDeparture("A1", "Oslo",
-            161, LocalTime.of(12,45), LocalTime.of(0,0), 2);
+            "161", LocalTime.of(12,45), LocalTime.of(0,0), 2);
     trainDeparture.setNewDelay(LocalTime.of(5,30));
 
     LocalTime expectedTimeWithDelay = LocalTime.of(18,15);
@@ -21,7 +21,7 @@ public class TrainDepartureTest {
   @Test
   public void testToStringWithTrack(){
     TrainDeparture trainDeparture = new TrainDeparture("A1", "Oslo",
-            161, LocalTime.of(12,45), LocalTime.of(0,0), 2);
+            "161", LocalTime.of(12,45), LocalTime.of(0,0), 2);
 
     String expectedStringWithTrack = "12:45 | A1 | Oslo | 161 | 00:00 | 2";
 
@@ -30,7 +30,7 @@ public class TrainDepartureTest {
   @Test
   public void testToStringWithoutTrack(){
     TrainDeparture trainDeparture = new TrainDeparture("A1", "Oslo",
-            161, LocalTime.of(12,45), LocalTime.of(0,0));
+            "161", LocalTime.of(12,45), LocalTime.of(0,0));
 
     String expectedStringWithTrack = "12:45 | A1 | Oslo | 161 | 00:00";
 

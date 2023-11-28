@@ -21,7 +21,7 @@ public class TrainDeparture {
   /**
    * The unique identifier of the train.
    */
-  private final int trainNumber;
+  private final String trainNumber;
 
   /**
    * The scheduled departure time of the train.
@@ -48,8 +48,11 @@ public class TrainDeparture {
    * @param delay         The delay in the departure time, if any.
    * @param track         The track for the train
    */
-  public TrainDeparture(String line, String destination, int trainNumber,
+  public TrainDeparture(String line, String destination, String trainNumber,
                         LocalTime departureTime, LocalTime delay, int track) {
+    verifyStringParameter(line, "Line");
+    verifyStringParameter(destination, "Destination");
+    verifyStringParameter(trainNumber, "Train number");
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
@@ -67,14 +70,25 @@ public class TrainDeparture {
    * @param delay         The delay in the departure time, if any.
    */
 
-  public TrainDeparture(String line, String destination, int trainNumber,
+  public TrainDeparture(String line, String destination, String trainNumber,
                         LocalTime departureTime, LocalTime delay) {
+    verifyStringParameter(line, "Line");
+    verifyStringParameter(destination, "Destination");
+    verifyStringParameter(trainNumber, "Train number");
+
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
     this.departureTime = departureTime;
     this.delay = delay;
     this.track = -1;
+  }
+  private void verifyStringParameter(String parameter, String parameterName)
+          throws IllegalArgumentException {
+    if (parameter.isBlank()) {
+      throw new IllegalArgumentException("The string for the parameter '"
+              + parameterName + "' was a blank string, please retry registration.");
+    }
   }
 
   /**
@@ -100,7 +114,7 @@ public class TrainDeparture {
    *
    * @return The unique identifier of the train.
    */
-  public int getTrainNumber() {
+  public String getTrainNumber() {
     return trainNumber;
   }
 
@@ -132,6 +146,15 @@ public class TrainDeparture {
   }
 
   /**
+   * Sets the delay in the departure time.
+   *
+   * @param track The new track the train is using.
+   */
+  public void setTrack(int track) {
+    this.track = track;
+  }
+
+  /**
    * Calculates the departure time including delay.
    *
    * @return The departure time including the delay.
@@ -150,12 +173,12 @@ public class TrainDeparture {
    */
   @Override
   public String toString() {
-    if (track != -1) {
-      return departureTime + " | " + line + " | " + destination + " | " + trainNumber
-              + " | " + delay + " | " + track;
-    } else {
-      return departureTime + " | " + line + " | " + destination + " | " + trainNumber
-              + " | " + delay;
+    return String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |",
+            departureTime,
+            line,
+            trainNumber,
+            destination,
+            ((track == -1) ? "": track),
+            ((delay.equals(LocalTime.MIDNIGHT)) ? "": delay));
     }
-  }
 }
