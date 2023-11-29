@@ -5,7 +5,7 @@ package edu.ntnu.stud;
  */
 public class TrainDispatchApp {
   public static void main(String[] args) {
-    UI program = new UI();
+    UserInterface program = new UserInterface();
     program.init();
     program.start();
   }

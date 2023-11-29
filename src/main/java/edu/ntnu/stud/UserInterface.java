@@ -2,11 +2,10 @@ package edu.ntnu.stud;
 
 import java.time.DateTimeException;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class UI {
+public class UserInterface {
   private TrainDepartureRegister trainDepartureRegister;
   private boolean finished;
   private Scanner scanner;
@@ -16,17 +15,23 @@ public class UI {
     finished = false;
     scanner = new Scanner(System.in);
 
+    try {
+      TrainDeparture trainDeparture1 = new TrainDeparture("A1", "Oslo",
+              "161", LocalTime.of(12,45), LocalTime.of(0,0), 2);
+      TrainDeparture trainDeparture2 = new TrainDeparture("L12", "Oslo",
+              "160", LocalTime.of(13,0), LocalTime.of(0,0), 1);
+      TrainDeparture trainDeparture3 = new TrainDeparture("B4", "Trondheim",
+              "150", LocalTime.of(14,20), LocalTime.of(0,0));
+      trainDepartureRegister.registerTrainDeparture(trainDeparture1);
+      trainDepartureRegister.registerTrainDeparture(trainDeparture2);
+      trainDepartureRegister.registerTrainDeparture(trainDeparture3);
+    } catch (IllegalArgumentException e){
+      System.out.println(e.getMessage());
+    }
+
+
   }
   public void start() {
-    TrainDeparture trainDeparture1 = new TrainDeparture("A1", "Oslo",
-            "161", LocalTime.of(12,45), LocalTime.of(0,0), 2);
-    TrainDeparture trainDeparture2 = new TrainDeparture("L12", "Oslo",
-            "160", LocalTime.of(13,0), LocalTime.of(0,0), 1);
-    TrainDeparture trainDeparture3 = new TrainDeparture("B4", "Trondheim",
-            "150", LocalTime.of(14,20), LocalTime.of(0,0));
-    trainDepartureRegister.registerTrainDeparture(trainDeparture1);
-    trainDepartureRegister.registerTrainDeparture(trainDeparture2);
-    trainDepartureRegister.registerTrainDeparture(trainDeparture3);
     while (!finished) {
       showMenu();
       choice();
@@ -139,7 +144,6 @@ public class UI {
             "Destination:",
             "Track:",
             "Delay:");
-    System.out.println("|" + "-".repeat(tableHeader.length()-2));
     System.out.println("|" + "-".repeat(tableHeader.length()/2-3)
             + time
             + "-".repeat(tableHeader.length()/2-3) + "|");

@@ -65,7 +65,9 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * Removes trains that have already departed based on their scheduled departure time with delay.
+   * Removes trains that have departed based on their scheduled departure time with delay.
+   *
+   * @param newTime the updated time inputted by the user
    */
   public void removeDepartedTrains(LocalTime newTime) {
     trainDepartures.removeIf(trainDeparture
