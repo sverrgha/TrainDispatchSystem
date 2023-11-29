@@ -7,14 +7,32 @@ import java.util.Scanner;
 
 public class UserInterface {
   private TrainDepartureRegister trainDepartureRegister;
-  private boolean finished;
-  private Scanner scanner;
+  private boolean finished = false;
+
+  private final Scanner scanner = new Scanner(System.in);
   private LocalTime time = LocalTime.of(0, 0);
+
+  private static final String SHOW_MENU = "1";
+  private static final String UPDATE_TIME = "2";
+  private static final String REGISTER_NEW_TRAIN = "3";
+  private static final String REMOVE_DEPARTURE = "4";
+  private static final String SEARCH_TRAIN_NUMBER = "5";
+  private static final String SEARCH_DESTINATION = "6";
+  private static final String SET_NEW_DELAY = "7";
+  private static final String SET_NEW_TRACK = "8";
+  private static final String EXIT_PROGRAM = "9";
+
   public void init(){
     trainDepartureRegister = new TrainDepartureRegister();
-    finished = false;
-    scanner = new Scanner(System.in);
-
+    registerDefaultDepartures();
+  }
+  public void start() {
+    while (!finished) {
+      showMenu();
+      choice();
+    }
+  }
+  private void registerDefaultDepartures() {
     try {
       TrainDeparture trainDeparture1 = new TrainDeparture("A1", "Oslo",
               "161", LocalTime.of(12,45), LocalTime.of(0,0), 2);
@@ -28,16 +46,8 @@ public class UserInterface {
     } catch (IllegalArgumentException e){
       System.out.println(e.getMessage());
     }
-
-
   }
-  public void start() {
-    while (!finished) {
-      showMenu();
-      choice();
-    }
-  }
-  private void showMenu(){
+  private static void showMenu(){
     System.out.println("\n");
     System.out.println("1. Show train departures.");
     System.out.println("2. Update current time.");
@@ -51,24 +61,19 @@ public class UserInterface {
     System.out.println("Please enter the number corresponding to wanted action:");
   }
   private void choice(){
-    try {
-      int menuChoice = Integer.parseInt(scanner.nextLine());
+    String menuChoice = scanner.nextLine();
 
-      switch (menuChoice){
-        case 1 -> showTrainDepartures();
-        case 2 -> updateTime();
-        case 3 -> registerTrain();
-        case 4 -> removeDeparture();
-        case 5 -> searchTrainNumber();
-        case 6 -> searchDestination();
-        case 7 -> setNewDelay();
-        case 8 -> setNewTrack();
-        case 9 -> endProgram();
-        default -> System.out.println("Invalid input! Please enter a valid number.");
-      }
-
-    }catch (NumberFormatException e){
-      System.out.println("Invalid input! Please enter a valid number.");
+    switch (menuChoice) {
+      case SHOW_MENU -> showTrainDepartures();
+      case UPDATE_TIME -> updateTime();
+      case REGISTER_NEW_TRAIN -> registerTrain();
+      case REMOVE_DEPARTURE -> removeDeparture();
+      case SEARCH_TRAIN_NUMBER -> searchTrainNumber();
+      case SEARCH_DESTINATION -> searchDestination();
+      case SET_NEW_DELAY -> setNewDelay();
+      case SET_NEW_TRACK -> setNewTrack();
+      case EXIT_PROGRAM -> endProgram();
+      default -> System.out.println("Invalid input! Please enter a valid number.");
     }
   }
   private void showTrainDepartures(){
@@ -91,7 +96,11 @@ public class UserInterface {
     System.out.println("Input delay (hh:mm):");
     LocalTime delay = LocalTime.parse(scanner.nextLine());
     TrainDeparture newTrainDeparture = new TrainDeparture(line, destination, trainNumber, departureTime, delay);
-    trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
+    try {
+      trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
   }
   private void removeDeparture() {
     System.out.println("Input train number:");

@@ -22,16 +22,15 @@ public class TrainDepartureRegister {
    * Registers a new train departure if it doesn't exist already.
    *
    * @param newTrainDeparture The train departure to be registered.
-   * @return true if the train with the same number is already registered, false otherwise.
    */
-  public boolean registerTrainDeparture(TrainDeparture newTrainDeparture) {
+  public void registerTrainDeparture(TrainDeparture newTrainDeparture) {
     boolean alreadyRegistered = trainDepartures.stream()
             .anyMatch(trainDeparture -> trainDeparture.getTrainNumber()
                     .equals(newTrainDeparture.getTrainNumber()));
-    if (!alreadyRegistered) {
-      trainDepartures.add(newTrainDeparture);
+    if (alreadyRegistered) {
+      throw new IllegalArgumentException("Train number already registered. Please try registration again.");
     }
-    return alreadyRegistered;
+    trainDepartures.add(newTrainDeparture);
   }
 
   public void removeTrainDeparture(String trainNumber){

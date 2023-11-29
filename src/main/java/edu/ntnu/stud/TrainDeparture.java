@@ -50,9 +50,9 @@ public class TrainDeparture {
    */
   public TrainDeparture(String line, String destination, String trainNumber,
                         LocalTime departureTime, LocalTime delay, int track) {
-    verifyStringParameter(line, "Line");
-    verifyStringParameter(destination, "Destination");
-    verifyStringParameter(trainNumber, "Train number");
+    verifyString(line, "Line");
+    verifyString(destination, "Destination");
+    verifyString(trainNumber, "Train number");
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
@@ -72,10 +72,11 @@ public class TrainDeparture {
 
   public TrainDeparture(String line, String destination, String trainNumber,
                         LocalTime departureTime, LocalTime delay) {
-    verifyStringParameter(line, "Line");
-    verifyStringParameter(destination, "Destination");
-    verifyStringParameter(trainNumber, "Train number");
-
+    verifyString(line, "Line");
+    verifyString(destination, "Destination");
+    verifyString(trainNumber, "Train number");
+    setTrack(track);
+    setNewDelay(delay);
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
@@ -83,13 +84,14 @@ public class TrainDeparture {
     this.delay = delay;
     this.track = -1;
   }
-  private void verifyStringParameter(String parameter, String parameterName)
+  private static void verifyString(String parameter, String parameterName)
           throws IllegalArgumentException {
     if (parameter.isBlank()) {
       throw new IllegalArgumentException("The string for the parameter '"
               + parameterName + "' was a blank string, please retry registration.");
     }
   }
+
 
   /**
    * Gets the line or route of the train.
