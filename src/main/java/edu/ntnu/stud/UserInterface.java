@@ -19,7 +19,7 @@ public class UserInterface {
   private static final String SEARCH_TRAIN_NUMBER = "5";
   private static final String SEARCH_DESTINATION = "6";
   private static final String SET_NEW_DELAY = "7";
-  private static final String SET_NEW_TRACK = "8";
+  private static final String SET_NEW_TRACK_NUMBER = "8";
   private static final String EXIT_PROGRAM = "9";
 
   public void init(){
@@ -56,7 +56,7 @@ public class UserInterface {
     System.out.println("5. Find departure by train number.");
     System.out.println("6. Find departures to a destination.");
     System.out.println("7. Set new delay.");
-    System.out.println("8. Set new track");
+    System.out.println("8. Set new track number");
     System.out.println("9. Exit.\n");
     System.out.println("Please enter the number corresponding to wanted action:");
   }
@@ -71,7 +71,7 @@ public class UserInterface {
       case SEARCH_TRAIN_NUMBER -> searchTrainNumber();
       case SEARCH_DESTINATION -> searchDestination();
       case SET_NEW_DELAY -> setNewDelay();
-      case SET_NEW_TRACK -> setNewTrack();
+      case SET_NEW_TRACK_NUMBER -> setNewTrackNumber();
       case EXIT_PROGRAM -> endProgram();
       default -> System.out.println("Invalid input! Please enter a valid number.");
     }
@@ -127,17 +127,21 @@ public class UserInterface {
               .setNewDelay(LocalTime.parse(scanner.nextLine()));
     } catch (DateTimeException e){
       System.out.println("Invalid time format. Please try again");
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
     }
   }
-  private void setNewTrack() {
+  private void setNewTrackNumber() {
     System.out.println("Input train number to search for:");
     String trainNumber = scanner.nextLine();
-    System.out.println("Input new track:");
+    System.out.println("Input new track number:");
     try {
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
-              .setTrack(Integer.parseInt(scanner.nextLine()));
+              .setTrackNumber(Integer.parseInt(scanner.nextLine()));
     } catch (DateTimeException e){
       System.out.println("Invalid input. Please try again");
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
     }
   }
   private void endProgram(){
@@ -151,7 +155,7 @@ public class UserInterface {
             "Line:",
             "Train number:",
             "Destination:",
-            "Track:",
+            "Track number:",
             "Delay:");
     System.out.println("|" + "-".repeat(tableHeader.length()/2-3)
             + time

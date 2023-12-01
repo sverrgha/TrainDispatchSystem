@@ -34,34 +34,36 @@ public class TrainDeparture {
   private LocalTime delay;
 
   /**
-   * The track for the train.
+   * The trackNumber for the train.
    */
-  private int track;
+  private int trackNumber;
 
   /**
-   * Constructs a TrainDeparture object, if track is specified/decided.
+   * Constructs a TrainDeparture object, if trackNumber is specified/decided.
    *
    * @param line          The line or route of the train.
    * @param destination   The destination of the train.
    * @param trainNumber   The unique identifier of the train.
    * @param departureTime The scheduled departure time of the train.
    * @param delay         The delay in the departure time, if any.
-   * @param track         The track for the train
+   * @param trackNumber         The trackNumber for the train
    */
   public TrainDeparture(String line, String destination, String trainNumber,
-                        LocalTime departureTime, LocalTime delay, int track) {
-    verifyString(line, "Line");
-    verifyString(destination, "Destination");
-    verifyString(trainNumber, "Train number");
+                        LocalTime departureTime, LocalTime delay, int trackNumber) {
+    verifyStringParameter(line, "Line");
+    verifyStringParameter(destination, "Destination");
+    verifyStringParameter(trainNumber, "Train number");
+    verifyLocalTimeParameter(departureTime, "Departure time");
+    setTrackNumber(trackNumber);
+    setNewDelay(delay);
+
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
     this.departureTime = departureTime;
-    this.delay = delay;
-    this.track = track;
   }
   /**
-   * Constructs a TrainDeparture object, if track is not specified/decided.
+   * Constructs a TrainDeparture object, if trackNumber is not specified/decided.
    *
    * @param line          The line or route of the train.
    * @param destination   The destination of the train.
@@ -72,23 +74,41 @@ public class TrainDeparture {
 
   public TrainDeparture(String line, String destination, String trainNumber,
                         LocalTime departureTime, LocalTime delay) {
-    verifyString(line, "Line");
-    verifyString(destination, "Destination");
-    verifyString(trainNumber, "Train number");
-    setTrack(track);
+    verifyStringParameter(line, "Line");
+    verifyStringParameter(destination, "Destination");
+    verifyStringParameter(trainNumber, "Train number");
+    verifyLocalTimeParameter(departureTime, "Departure time");
+    setTrackNumber(trackNumber);
     setNewDelay(delay);
+
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
     this.departureTime = departureTime;
-    this.delay = delay;
-    this.track = -1;
   }
-  private static void verifyString(String parameter, String parameterName)
+  private static void verifyStringParameter(String parameter, String parameterName)
           throws IllegalArgumentException {
     if (parameter.isBlank()) {
       throw new IllegalArgumentException("The string for the parameter '"
               + parameterName + "' was a blank string, please retry registration.");
+    }
+  }
+  private static void verifyLocalTimeParameter(LocalTime time, String parameterName)
+          throws IllegalArgumentException {
+    if (time == null) {
+      throw new IllegalArgumentException("The time for the parameter '"
+              + parameterName + "' time was null, please retry registration.");
+    }
+    else if (time.isBefore(LocalTime.of(0, 0))
+            || time.isAfter(LocalTime.of(23,59))) {
+      throw new IllegalArgumentException("The time for the parameter'"
+              + parameterName + "' must be between 00:00 and 23:59, please retry registration.");
+    }
+  }
+  private static void verifyTrackNumberNumber(int trackNumber)
+          throws IllegalArgumentException {
+    if (trackNumber < -1) {
+      throw new IllegalArgumentException("Track number must be -1 or a positive number. Please retry");
     }
   }
 
@@ -144,16 +164,21 @@ public class TrainDeparture {
    * @param newDelay The new delay in the departure time.
    */
   public void setNewDelay(LocalTime newDelay) {
+    verifyLocalTimeParameter(newDelay, "newDelay");
     delay = newDelay;
   }
 
+  public int getTrackNumber(){
+    return  trackNumber;
+  }
   /**
    * Sets the delay in the departure time.
    *
-   * @param track The new track the train is using.
+   * @param trackNumber The new trackNumber the train is using.
    */
-  public void setTrack(int track) {
-    this.track = track;
+  public void setTrackNumber(int trackNumber) {
+    verifyTrackNumberNumber(trackNumber);
+    this.trackNumber = trackNumber;
   }
 
   /**
@@ -180,7 +205,7 @@ public class TrainDeparture {
             line,
             trainNumber,
             destination,
-            ((track == -1) ? "": track),
+            ((trackNumber == -1) ? "": trackNumber),
             ((delay.equals(LocalTime.MIDNIGHT)) ? "": delay));
     }
 }
