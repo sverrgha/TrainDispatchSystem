@@ -16,19 +16,23 @@ public class TrainDepartureRegister {
   /**
    * The list of registered train departures.
    */
-  private ArrayList<TrainDeparture> trainDepartures = new ArrayList<>();
+  private final ArrayList<TrainDeparture> trainDepartures = new ArrayList<>();
 
+  public boolean checkIfRegistered(String trainNumber) {
+    return trainDepartures.stream()
+            .anyMatch(trainDeparture -> trainDeparture.getTrainNumber()
+                    .equals(trainNumber));
+
+  }
   /**
    * Registers a new train departure if it doesn't exist already.
    *
    * @param newTrainDeparture The train departure to be registered.
    */
   public void registerTrainDeparture(TrainDeparture newTrainDeparture) {
-    boolean alreadyRegistered = trainDepartures.stream()
-            .anyMatch(trainDeparture -> trainDeparture.getTrainNumber()
-                    .equals(newTrainDeparture.getTrainNumber()));
+    boolean alreadyRegistered = checkIfRegistered(newTrainDeparture.getTrainNumber());
     if (alreadyRegistered) {
-      throw new IllegalArgumentException("Train number already registered. Please try registration again.");
+      throw new IllegalArgumentException("Train number already registered. Please retry registration.");
     }
     trainDepartures.add(newTrainDeparture);
   }

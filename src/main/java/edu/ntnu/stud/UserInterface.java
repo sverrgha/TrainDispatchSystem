@@ -1,17 +1,12 @@
 package edu.ntnu.stud;
 
-import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Scanner;
 
 public class UserInterface {
   private TrainDepartureRegister trainDepartureRegister;
   private boolean finished = false;
-
-  private final Scanner scanner = new Scanner(System.in);
   private LocalTime time = LocalTime.of(0, 0);
-
   private static final String SHOW_MENU = "1";
   private static final String UPDATE_TIME = "2";
   private static final String REGISTER_NEW_TRAIN = "3";
@@ -61,7 +56,7 @@ public class UserInterface {
     System.out.println("Please enter the number corresponding to wanted action:");
   }
   private void choice(){
-    String menuChoice = scanner.nextLine();
+    String menuChoice = UserInput.scanString();
 
     switch (menuChoice) {
       case SHOW_MENU -> showTrainDepartures();
@@ -80,69 +75,77 @@ public class UserInterface {
     printTrainDeparturesList(trainDepartureRegister.sortByDepartureTime());
   }
   private void updateTime(){
-    System.out.println("Input new time (hh:mm):");
-    time = LocalTime.parse(scanner.nextLine());
+    time = UserInput.scanLocalTimeForTrainDeparture("new time");
     trainDepartureRegister.removeDepartedTrains(time);
   }
   private void registerTrain(){
-    System.out.println("Input line:");
-    String line = scanner.nextLine();
-    System.out.println("Input destination:");
-    String destination = scanner.nextLine();
-    System.out.println("Input train number:");
-    String trainNumber = scanner.nextLine();
-    System.out.println("Input departure time (hh:mm):");
-    LocalTime departureTime = LocalTime.parse(scanner.nextLine());
-    System.out.println("Input delay (hh:mm):");
-    LocalTime delay = LocalTime.parse(scanner.nextLine());
-    TrainDeparture newTrainDeparture = new TrainDeparture(line, destination, trainNumber, departureTime, delay);
-    try {
+    String line = UserInput.scanStringForTrainDeparture("line");
+    String destination = UserInput.scanStringForTrainDeparture("destination");
+    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
+    LocalTime departureTime = UserInput.scanLocalTimeForTrainDeparture("departure time");
+    LocalTime delay = UserInput.scanLocalTimeForTrainDeparture("delay");
+    boolean trackIsSet = UserInput.scanIfTrackIsSet();
+
+    TrainDeparture newTrainDeparture;
+    if (trackIsSet) {
+      int trackNumber = UserInput.scanIntForTrainDeparture("track number");
+      newTrainDeparture = new TrainDeparture(line, destination,
+              trainNumber, departureTime, delay, trackNumber);
+    }
+    else {
+      newTrainDeparture = new TrainDeparture(line, destination,
+              trainNumber, departureTime, delay);
+    }
+    trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
+    /*try {
       trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
-    }
+    }*/
   }
   private void removeDeparture() {
-    System.out.println("Input train number:");
-    String trainNumber = scanner.nextLine();
+    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
     trainDepartureRegister.removeTrainDeparture(trainNumber);
   }
   private void searchTrainNumber(){
-    System.out.println("Input train number to search for:");
-    String trainNumber = scanner.nextLine();
-    printDisplayOverview();
-    System.out.println(trainDepartureRegister.findDepartureByTrainNumber(trainNumber));
+    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
+    TrainDeparture trainDeparture = trainDepartureRegister.findDepartureByTrainNumber(trainNumber);
+    if (trainDeparture != null) {
+      printDisplayOverview();
+      System.out.println(trainDeparture);
+    } else {
+      System.out.println("Train number not found in register.");
+    }
   }
   private void searchDestination(){
-    System.out.println("Input your destination:");
-    String destination = scanner.nextLine();
+    String destination = UserInput.scanStringForTrainDeparture("Departure");
     printTrainDeparturesList(trainDepartureRegister.findDeparturesByDestination(destination));
   }
   private void setNewDelay(){
-    System.out.println("Input train number to search for:");
-    String trainNumber = scanner.nextLine();
-    System.out.println("Input new delay:");
-    try {
+    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
+    boolean registered = trainDepartureRegister.checkIfRegistered(trainNumber);
+    if (registered) {
+      LocalTime delay = UserInput.scanLocalTimeForTrainDeparture("delay");
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
-              .setNewDelay(LocalTime.parse(scanner.nextLine()));
-    } catch (DateTimeException e){
-      System.out.println("Invalid time format. Please try again");
-    } catch (IllegalArgumentException e) {
-      System.out.println(e.getMessage());
+              .setNewDelay(delay);
     }
+    else {
+      System.out.println("Train number not found in register.");
+    }
+
   }
   private void setNewTrackNumber() {
-    System.out.println("Input train number to search for:");
-    String trainNumber = scanner.nextLine();
-    System.out.println("Input new track number:");
-    try {
+    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
+    boolean registered = trainDepartureRegister.checkIfRegistered(trainNumber);
+    if (registered) {
+      int trackNumber = UserInput.scanIntForTrainDeparture("track number");
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
-              .setTrackNumber(Integer.parseInt(scanner.nextLine()));
-    } catch (DateTimeException e){
-      System.out.println("Invalid input. Please try again");
-    } catch (IllegalArgumentException e) {
-      System.out.println(e.getMessage());
+              .setTrackNumber(trackNumber);
     }
+    else {
+      System.out.println("Train number not found in register.");
+    }
+
   }
   private void endProgram(){
     System.out.println("Thanks for using the Train Dispatch App!");

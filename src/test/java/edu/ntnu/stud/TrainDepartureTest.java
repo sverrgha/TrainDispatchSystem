@@ -35,9 +35,8 @@ public class TrainDepartureTest {
     LocalTime delay = LocalTime.of(0, 10);
     int track = 5;
 
-    assertThrows(IllegalArgumentException.class, () -> {
-      new TrainDeparture(line, destination, trainNumber, departureTime, delay, track);
-    });
+    assertThrows(IllegalArgumentException.class, () ->
+      new TrainDeparture(line, destination, trainNumber, departureTime, delay, track));
   }
 
   @Test
@@ -48,9 +47,8 @@ public class TrainDepartureTest {
     LocalTime departureTime = LocalTime.of(12, 45);
     LocalTime delay = null; // Null delay
 
-    assertThrows(IllegalArgumentException.class, () -> {
-      new TrainDeparture(line, destination, trainNumber, departureTime, delay);
-    });
+    assertThrows(IllegalArgumentException.class, () ->
+      new TrainDeparture(line, destination, trainNumber, departureTime, delay));
   }
 
   @Test
@@ -62,9 +60,8 @@ public class TrainDepartureTest {
     LocalTime delay = LocalTime.of(0, 5);
     int track = -2; // Negative track number
 
-    assertThrows(IllegalArgumentException.class, () -> {
-      new TrainDeparture(line, destination, trainNumber, departureTime, delay, track);
-    });
+    assertThrows(IllegalArgumentException.class, () ->
+      new TrainDeparture(line, destination, trainNumber, departureTime, delay, track));
   }
   @Test
   public void testDepartureTimeWithDelay(){
@@ -92,7 +89,7 @@ public class TrainDepartureTest {
             line,
             trainNumber,
             destination,
-            ((track == -1) ? "" : track),
+            track,
             ((delay.equals(LocalTime.MIDNIGHT)) ? "" : delay));
 
     assertEquals(expectedOutput, departure.toString());
