@@ -1,6 +1,8 @@
 package edu.ntnu.stud;
 
+import java.lang.reflect.Array;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserInterface {
@@ -105,7 +107,13 @@ public class UserInterface {
   }
   private void removeDeparture() {
     String trainNumber = UserInput.scanStringForTrainDeparture("train number");
-    trainDepartureRegister.removeTrainDeparture(trainNumber);
+    boolean registered = trainDepartureRegister.checkIfRegistered(trainNumber);
+    if (registered) {
+      trainDepartureRegister.removeTrainDeparture(trainNumber);
+    }
+    else {
+      System.out.println("Train number not found in register.");
+    }
   }
   private void searchTrainNumber(){
     String trainNumber = UserInput.scanStringForTrainDeparture("train number");
@@ -118,8 +126,14 @@ public class UserInterface {
     }
   }
   private void searchDestination(){
-    String destination = UserInput.scanStringForTrainDeparture("Departure");
-    printTrainDeparturesList(trainDepartureRegister.findDeparturesByDestination(destination));
+    String destination = UserInput.scanStringForTrainDeparture("destination");
+    List<TrainDeparture> trainDepartures = trainDepartureRegister.findDeparturesByDestination(destination);
+    if (!trainDepartures.isEmpty()) {
+      printTrainDeparturesList(trainDepartures);
+    }
+    else {
+      System.out.println("Could not find any departures to the destination.");
+    }
   }
   private void setNewDelay(){
     String trainNumber = UserInput.scanStringForTrainDeparture("train number");
