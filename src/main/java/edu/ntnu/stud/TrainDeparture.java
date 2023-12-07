@@ -54,13 +54,13 @@ public class TrainDeparture {
     verifyStringParameter(destination, "Destination");
     verifyStringParameter(trainNumber, "Train number");
     verifyLocalTimeParameter(departureTime, "Departure time");
-    setTrackNumber(trackNumber);
-    setNewDelay(delay);
 
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
     this.departureTime = departureTime;
+    setTrackNumber(trackNumber);
+    setDelay(delay);
   }
   /**
    * Constructs a TrainDeparture object, if trackNumber is not specified/decided.
@@ -78,13 +78,14 @@ public class TrainDeparture {
     verifyStringParameter(destination, "Destination");
     verifyStringParameter(trainNumber, "Train number");
     verifyLocalTimeParameter(departureTime, "Departure time");
-    setTrackNumber(trackNumber);
-    setNewDelay(delay);
+
 
     this.line = line;
     this.destination = destination;
     this.trainNumber = trainNumber;
     this.departureTime = departureTime;
+    this.trackNumber = -1;
+    setDelay(delay);
   }
   private static void verifyStringParameter(String parameter, String parameterName)
           throws IllegalArgumentException {
@@ -93,16 +94,19 @@ public class TrainDeparture {
               + parameterName + "' was a blank string, please retry registration.");
     }
   }
-  private static void verifyLocalTimeParameter(LocalTime time, String parameterName)
+  private void verifyLocalTimeParameter(LocalTime time, String parameterName)
           throws IllegalArgumentException {
     if (time == null) {
       throw new IllegalArgumentException("The time for the parameter '"
               + parameterName + "' time was null, please retry registration.");
     }
-    else if (time.isBefore(LocalTime.of(0, 0))
-            || time.isAfter(LocalTime.of(23,59))) {
-      throw new IllegalArgumentException("The time for the parameter'"
-              + parameterName + "' must be between 00:00 and 23:59, please retry registration.");
+    if (parameterName.equals("delay")) {
+      int maxHours = departureTime.getHour();
+      int maxMin = departureTime.getMinute();
+      if (time.isAfter(LocalTime.of(23,59))) {
+        throw new IllegalArgumentException("Delay + departure time must be max 23:59, "
+                + "delay can't be more than" + maxHours + ":" + maxMin);
+      }
     }
   }
   private static void verifyTrackNumberNumber(int trackNumber)
@@ -161,11 +165,11 @@ public class TrainDeparture {
   /**
    * Sets the delay in the departure time.
    *
-   * @param newDelay The new delay in the departure time.
+   * @param delay The new delay in the departure time.
    */
-  public void setNewDelay(LocalTime newDelay) {
-    verifyLocalTimeParameter(newDelay, "newDelay");
-    delay = newDelay;
+  public void setDelay(LocalTime delay) {
+    verifyLocalTimeParameter(delay, "delay");
+    this.delay = delay;
   }
 
   public int getTrackNumber(){

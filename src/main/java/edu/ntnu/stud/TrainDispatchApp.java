@@ -8,6 +8,5 @@ public class TrainDispatchApp {
     UserInterface program = new UserInterface();
     program.init();
     program.start();
-
   }
 }

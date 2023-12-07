@@ -1,8 +1,6 @@
 package edu.ntnu.stud;
 
-import java.lang.reflect.Array;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserInterface {
@@ -34,7 +32,7 @@ public class UserInterface {
       TrainDeparture trainDeparture1 = new TrainDeparture("A1", "Oslo",
               "161", LocalTime.of(12,45), LocalTime.of(0,0), 2);
       TrainDeparture trainDeparture2 = new TrainDeparture("L12", "Oslo",
-              "160", LocalTime.of(13,0), LocalTime.of(0,0), 1);
+              "160", LocalTime.of(13,0), LocalTime.of(0,45), 1);
       TrainDeparture trainDeparture3 = new TrainDeparture("B4", "Trondheim",
               "150", LocalTime.of(14,20), LocalTime.of(0,0));
       trainDepartureRegister.registerTrainDeparture(trainDeparture1);
@@ -86,10 +84,9 @@ public class UserInterface {
     String trainNumber = UserInput.scanStringForTrainDeparture("train number");
     LocalTime departureTime = UserInput.scanLocalTimeForTrainDeparture("departure time");
     LocalTime delay = UserInput.scanLocalTimeForTrainDeparture("delay");
-    boolean trackIsSet = UserInput.scanIfTrackIsSet();
-
+    boolean trackIsAssigned = UserInput.scanIfTrackIsAssigned();
     TrainDeparture newTrainDeparture;
-    if (trackIsSet) {
+    if (trackIsAssigned) {
       int trackNumber = UserInput.scanIntForTrainDeparture("track number");
       newTrainDeparture = new TrainDeparture(line, destination,
               trainNumber, departureTime, delay, trackNumber);
@@ -99,11 +96,6 @@ public class UserInterface {
               trainNumber, departureTime, delay);
     }
     trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
-    /*try {
-      trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
-    } catch (IllegalArgumentException e) {
-      System.out.println(e.getMessage());
-    }*/
   }
   private void removeDeparture() {
     String trainNumber = UserInput.scanStringForTrainDeparture("train number");
@@ -141,7 +133,7 @@ public class UserInterface {
     if (registered) {
       LocalTime delay = UserInput.scanLocalTimeForTrainDeparture("delay");
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
-              .setNewDelay(delay);
+              .setDelay(delay);
     }
     else {
       System.out.println("Train number not found in register.");

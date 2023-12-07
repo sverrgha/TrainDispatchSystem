@@ -25,13 +25,11 @@ public class UserInput {
   }
   public static LocalTime scanLocalTime() {
     LocalTime out = null;
-    boolean validInput = false;
     Scanner scanner = new Scanner(System.in);
-    while (!validInput) {
+    while (out == null) {
       if (scanner.hasNextLine()) {
         try{
           out = LocalTime.parse(scanner.nextLine());
-          validInput = true;
         } catch (DateTimeException e) {
           System.out.println("Input must be at the format 'HH:mm' and " +
                   "must be between 00:00 and 23:59, please try again.");
@@ -67,8 +65,8 @@ public class UserInput {
     return scanInt();
   }
 
-  public static boolean scanIfTrackIsSet() {
-    System.out.println("Is the track number decided yet (y/n)?");
+  public static boolean scanIfTrackIsAssigned() {
+    System.out.println("Is the track number has been assigned (y/n)?");
     boolean out = false;
     String input = "";
     Scanner scanner = new Scanner(System.in);
@@ -76,10 +74,10 @@ public class UserInput {
       if (scanner.hasNextLine()){
         input = scanner.nextLine();
       }
-      if (!input.equalsIgnoreCase("y") && !input.equalsIgnoreCase("n")) {
-        System.out.println("Input must be either 'y' for yes or 'n' for no, please try again");
-      } else if (input.equalsIgnoreCase("y")) {
-        out = true;
+      switch (input.toLowerCase()) {
+        case "y" -> out = true;
+        case "n" -> out = false;
+        default -> System.out.println("Input must be either 'y' for yes or 'n' for no, please try again");
       }
     }
     return out;

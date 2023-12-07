@@ -16,7 +16,11 @@ public class TrainDepartureRegister {
   /**
    * The list of registered train departures.
    */
-  private final ArrayList<TrainDeparture> trainDepartures = new ArrayList<>();
+  private final ArrayList<TrainDeparture> trainDepartures;
+
+  public TrainDepartureRegister() {
+    trainDepartures = new ArrayList<>();
+  }
 
   public boolean checkIfRegistered(String trainNumber) {
     return trainDepartures.stream()
@@ -34,11 +38,19 @@ public class TrainDepartureRegister {
     if (alreadyRegistered) {
       throw new IllegalArgumentException("Train number already registered. Please retry registration.");
     }
-    trainDepartures.add(newTrainDeparture);
+    else {
+      trainDepartures.add(newTrainDeparture);
+    }
+
   }
 
   public void removeTrainDeparture(String trainNumber){
-    trainDepartures.removeIf(trainDeparture -> trainDeparture.getTrainNumber().equals(trainNumber));
+    boolean alreadyRegistered = checkIfRegistered(trainNumber);
+    if (alreadyRegistered) {
+      trainDepartures.removeIf(trainDeparture -> trainDeparture.getTrainNumber().equals(trainNumber));
+    } else {
+      throw new IllegalArgumentException("Train number is not registered, nothing happened.");
+    }
   }
 
   /**
@@ -70,11 +82,11 @@ public class TrainDepartureRegister {
   /**
    * Removes trains that have departed based on their scheduled departure time with delay.
    *
-   * @param newTime the updated time inputted by the user
+   * @param time the updated time inputted by the user
    */
-  public void removeDepartedTrains(LocalTime newTime) {
+  public void removeDepartedTrains(LocalTime time) {
     trainDepartures.removeIf(trainDeparture
-            -> trainDeparture.departureTimeWithDelay().isBefore(newTime));
+            -> trainDeparture.departureTimeWithDelay().isBefore(time));
   }
 
   /**
@@ -82,7 +94,7 @@ public class TrainDepartureRegister {
    *
    * @return A sorted list based on departure time of train departures.
    */
-  public ArrayList<TrainDeparture> sortByDepartureTime() {
+  public List<TrainDeparture> sortByDepartureTime() {
     ArrayList<TrainDeparture> sorted = new ArrayList<>(trainDepartures);
     sorted.sort(Comparator.comparing(TrainDeparture::getDepartureTime));
     return sorted;
