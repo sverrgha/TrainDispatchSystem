@@ -4,6 +4,7 @@ import java.time.LocalTime;
 
 /**
  * Represents information about a train departure.
+ * Includes getters for all attributes and setters for delay and trackNumber.
  */
 public class TrainDeparture {
 
@@ -87,6 +88,14 @@ public class TrainDeparture {
     this.trackNumber = -1;
     setDelay(delay);
   }
+
+  /**
+   * Verifies that the string parameter is not null or blank.
+   *
+   * @param parameter     The string parameter to be verified.
+   * @param parameterName The name of the parameter to be used in the exception message.
+   * @throws IllegalArgumentException If the string parameter is null or blank.
+   */
   private static void verifyStringParameter(String parameter, String parameterName)
           throws IllegalArgumentException {
     if (parameter.isBlank()) {
@@ -94,6 +103,14 @@ public class TrainDeparture {
               + parameterName + "' was a blank string, please retry registration.");
     }
   }
+
+  /**
+   * Verifies that the LocalTime parameter is not null.
+   *
+   * @param time     The LocalTime parameter to be verified.
+   * @param parameterName The name of the parameter to be used in the exception message.
+   * @throws IllegalArgumentException If the LocalTime parameter is null.
+   */
   private void verifyLocalTimeParameter(LocalTime time, String parameterName)
           throws IllegalArgumentException {
     if (time == null) {
@@ -103,16 +120,24 @@ public class TrainDeparture {
     if (parameterName.equals("delay")) {
       int maxHours = departureTime.getHour();
       int maxMin = departureTime.getMinute();
-      if (time.isAfter(LocalTime.of(23,59))) {
+      if (time.isAfter(LocalTime.of(23, 59))) {
         throw new IllegalArgumentException("Delay + departure time must be max 23:59, "
                 + "delay can't be more than" + maxHours + ":" + maxMin);
       }
     }
   }
+
+  /**
+   * Verifies that the trackNumber parameter is not null.
+   *
+   * @param trackNumber     The trackNumber parameter to be verified.
+   * @throws IllegalArgumentException If the trackNumber parameter is null.
+   */
   private static void verifyTrackNumberNumber(int trackNumber)
           throws IllegalArgumentException {
     if (trackNumber < -1) {
-      throw new IllegalArgumentException("Track number must be -1 or a positive number. Please retry");
+      throw new IllegalArgumentException("Track number must be -1 "
+              + "or a positive number. Please retry");
     }
   }
 
@@ -163,7 +188,7 @@ public class TrainDeparture {
   }
 
   /**
-   * Sets the delay in the departure time.
+   * Sets the delay if the input is valid.
    *
    * @param delay The new delay in the departure time.
    */
@@ -172,9 +197,15 @@ public class TrainDeparture {
     this.delay = delay;
   }
 
-  public int getTrackNumber(){
+  /**
+     * Gets the trackNumber the train is using.
+     *
+     * @return The trackNumber the train is using.
+     */
+  public int getTrackNumber() {
     return  trackNumber;
   }
+
   /**
    * Sets the delay in the departure time.
    *
@@ -209,7 +240,7 @@ public class TrainDeparture {
             line,
             trainNumber,
             destination,
-            ((trackNumber == -1) ? "": trackNumber),
-            ((delay.equals(LocalTime.MIDNIGHT)) ? "": delay));
-    }
+            ((trackNumber == -1) ? "" : trackNumber),
+            ((delay.equals(LocalTime.MIDNIGHT)) ? "" : delay));
+  }
 }

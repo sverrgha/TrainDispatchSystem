@@ -3,6 +3,10 @@ package edu.ntnu.stud;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * This class contains methods for handling user input.
+ * Goal: Handle/interpret input from the user, and use it to interact with the TrainDepartureRegister.
+ */
 public class UserInterface {
   private TrainDepartureRegister trainDepartureRegister;
   private boolean finished = false;

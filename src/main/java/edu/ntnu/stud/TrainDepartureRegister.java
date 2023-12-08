@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Represents a register of train departures.
- * The register allows for the registration, retrieval,
- * and manipulation of train departure information.
+ * Represents a register of train departures from a station.
+ *
  */
 public class TrainDepartureRegister {
 
@@ -18,36 +17,55 @@ public class TrainDepartureRegister {
    */
   private final ArrayList<TrainDeparture> trainDepartures;
 
+  /**
+   * Constructs a TrainDepartureRegister object.
+   */
   public TrainDepartureRegister() {
     trainDepartures = new ArrayList<>();
   }
 
+  /**
+     * Checks if a train departure is already registered.
+     *
+     * @param trainNumber The train number to check for.
+     * @return True if the train departure is already registered, false otherwise.
+     */
   public boolean checkIfRegistered(String trainNumber) {
     return trainDepartures.stream()
             .anyMatch(trainDeparture -> trainDeparture.getTrainNumber()
                     .equals(trainNumber));
 
   }
+
   /**
-   * Registers a new train departure if it doesn't exist already.
+   * Registers a new train departure.
    *
-   * @param newTrainDeparture The train departure to be registered.
+   * @param newTrainDeparture The train departure to register.
+   * @throws IllegalArgumentException if the train number is already registered.
    */
-  public void registerTrainDeparture(TrainDeparture newTrainDeparture) {
+  public void registerTrainDeparture(TrainDeparture newTrainDeparture)
+          throws IllegalArgumentException {
     boolean alreadyRegistered = checkIfRegistered(newTrainDeparture.getTrainNumber());
     if (alreadyRegistered) {
-      throw new IllegalArgumentException("Train number already registered. Please retry registration.");
-    }
-    else {
+      throw new IllegalArgumentException("Train number already registered. "
+              + "Please retry registration.");
+    } else {
       trainDepartures.add(newTrainDeparture);
     }
-
   }
 
-  public void removeTrainDeparture(String trainNumber){
+  /**
+   * Removes a train departure from the register, if it is already registered.
+   *
+   * @param trainNumber The train number of the train departure to remove.
+   * @throws IllegalArgumentException if the train number is not registered.
+   */
+  public void removeTrainDeparture(String trainNumber)
+          throws IllegalArgumentException {
     boolean alreadyRegistered = checkIfRegistered(trainNumber);
     if (alreadyRegistered) {
-      trainDepartures.removeIf(trainDeparture -> trainDeparture.getTrainNumber().equals(trainNumber));
+      trainDepartures.removeIf(trainDeparture ->
+              trainDeparture.getTrainNumber().equals(trainNumber));
     } else {
       throw new IllegalArgumentException("Train number is not registered, nothing happened.");
     }
