@@ -21,7 +21,7 @@ public class UserInput {
     Scanner scanner = new Scanner(System.in);
     while (out.isEmpty()) {
       if (scanner.hasNextLine()) {
-        out = scanner.nextLine();
+        out = scanner.nextLine().trim();
       }
       if (out.isEmpty()) {
         System.out.println("String was empty, please try again.");
@@ -42,7 +42,7 @@ public class UserInput {
     while (out == null) {
       if (scanner.hasNextLine()) {
         try {
-          out = LocalTime.parse(scanner.nextLine());
+          out = LocalTime.parse(scanner.nextLine().trim());
         } catch (DateTimeException e) {
           System.out.println("Input must be at the format 'HH:mm' and "
                   + "must be between 00:00 and 23:59, please try again.");
@@ -89,7 +89,7 @@ public class UserInput {
     Scanner scanner = new Scanner(System.in);
     while (!input.equalsIgnoreCase("y") && !input.equalsIgnoreCase("n")) {
       if (scanner.hasNextLine()) {
-        input = scanner.nextLine();
+        input = scanner.nextLine().trim();
       }
       switch (input.toLowerCase()) {
         case "y" -> out = true;
