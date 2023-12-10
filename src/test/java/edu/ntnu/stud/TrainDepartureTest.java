@@ -107,18 +107,18 @@ public class TrainDepartureTest {
     String trainNumber = "12345";
     LocalTime departureTime = LocalTime.of(10, 30);
     LocalTime delay = LocalTime.of(0, 15);
-    int track = 3;
+    int trackNumber = 3;
 
     TrainDeparture departure = new TrainDeparture(line, destination,
-            trainNumber, departureTime, delay, track);
+            trainNumber, departureTime, delay, trackNumber);
 
     String expectedOutput = String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |",
             departureTime,
             line,
             trainNumber,
             destination,
-            track,
-            ((delay.equals(LocalTime.MIDNIGHT)) ? "" : delay));
+            ((delay.equals(LocalTime.MIDNIGHT)) ? "" : delay),
+            ((trackNumber == -1) ? "" : trackNumber));
 
     assertEquals(expectedOutput, departure.toString());
   }
