@@ -5,13 +5,14 @@ import java.util.List;
 
 /**
  * This class contains methods for handling user input.
- * Goal: Handle/interpret input from the user, and use it to interact with the TrainDepartureRegister.
+ * Goal: Handle/interpret input from the user,
+ * and use it to interact with the TrainDepartureRegister.
  */
 public class UserInterface {
   private TrainDepartureRegister trainDepartureRegister;
-  private boolean finished = false;
-  private LocalTime time = LocalTime.of(0, 0);
-  private static final String SHOW_MENU = "1";
+  private boolean finished;
+  private LocalTime time;
+  private static final String SHOW_DEPARTURES = "1";
   private static final String UPDATE_TIME = "2";
   private static final String REGISTER_NEW_TRAIN = "3";
   private static final String REMOVE_DEPARTURE = "4";
@@ -21,32 +22,49 @@ public class UserInterface {
   private static final String SET_NEW_TRACK_NUMBER = "8";
   private static final String EXIT_PROGRAM = "9";
 
-  public void init(){
+  /**
+   * Constructs a UserInterface object.
+   */
+  public void init() {
     trainDepartureRegister = new TrainDepartureRegister();
+    finished = false;
+    time = LocalTime.of(0, 0);
     registerDefaultDepartures();
   }
+
+  /**
+   * Starts the user interface, and runs it until finished.
+   */
   public void start() {
     while (!finished) {
       showMenu();
       choice();
     }
   }
+
+  /**
+   * Registers some preset train departures.
+   */
   private void registerDefaultDepartures() {
     try {
       TrainDeparture trainDeparture1 = new TrainDeparture("A1", "Oslo",
-              "161", LocalTime.of(12,45), LocalTime.of(0,0), 2);
+              "161", LocalTime.of(12, 45), LocalTime.of(0, 0), 2);
       TrainDeparture trainDeparture2 = new TrainDeparture("L12", "Oslo",
-              "160", LocalTime.of(13,0), LocalTime.of(0,45), 1);
+              "160", LocalTime.of(13, 0), LocalTime.of(0, 45), 1);
       TrainDeparture trainDeparture3 = new TrainDeparture("B4", "Trondheim",
-              "150", LocalTime.of(14,20), LocalTime.of(0,0));
+              "150", LocalTime.of(14, 20), LocalTime.of(0, 0));
       trainDepartureRegister.registerTrainDeparture(trainDeparture1);
       trainDepartureRegister.registerTrainDeparture(trainDeparture2);
       trainDepartureRegister.registerTrainDeparture(trainDeparture3);
-    } catch (IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
   }
-  private static void showMenu(){
+
+  /**
+   * Prints the menu.
+   */
+  private static void showMenu() {
     System.out.println("\n");
     System.out.println("1. Show train departures.");
     System.out.println("2. Update current time.");
@@ -59,11 +77,15 @@ public class UserInterface {
     System.out.println("9. Exit.\n");
     System.out.println("Please enter the number corresponding to wanted action:");
   }
-  private void choice(){
-    String menuChoice = UserInput.scanString();
+
+  /**
+   * Handles the user's choice.
+   */
+  private void choice() {
+    String menuChoice = UserInput.scanString("your choice");
 
     switch (menuChoice) {
-      case SHOW_MENU -> showTrainDepartures();
+      case SHOW_DEPARTURES -> showTrainDepartures();
       case UPDATE_TIME -> updateTime();
       case REGISTER_NEW_TRAIN -> registerTrain();
       case REMOVE_DEPARTURE -> removeDeparture();
@@ -75,44 +97,70 @@ public class UserInterface {
       default -> System.out.println("Invalid input! Please enter a valid number.");
     }
   }
-  private void showTrainDepartures(){
+
+  /**
+   * Prints the list of train departures.
+   */
+  private void showTrainDepartures() {
     printTrainDeparturesList(trainDepartureRegister.sortByDepartureTime());
   }
-  private void updateTime(){
-    time = UserInput.scanLocalTimeForTrainDeparture("new time");
+
+  /**
+   * Updates the time and removes departed trains.
+   */
+  private void updateTime() {
+    LocalTime newTime = UserInput.scanLocalTime("new time");
+    if (newTime.isBefore(time)) {
+      System.out.println("Time cannot be set to a time before the current time. "
+              + "Nothing changed.");
+    } else {
+      time = newTime;
+    }
     trainDepartureRegister.removeDepartedTrains(time);
   }
-  private void registerTrain(){
-    String line = UserInput.scanStringForTrainDeparture("line");
-    String destination = UserInput.scanStringForTrainDeparture("destination");
-    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
-    LocalTime departureTime = UserInput.scanLocalTimeForTrainDeparture("departure time");
-    LocalTime delay = UserInput.scanLocalTimeForTrainDeparture("delay");
+
+  /**
+   * Registers a new train departure to the register.
+   */
+  private void registerTrain() {
+    String line = UserInput.scanString("line");
+    String destination = UserInput.scanString("destination");
+    String trainNumber = UserInput.scanString("train number");
+    LocalTime departureTime = UserInput.scanLocalTime("departure time");
+    LocalTime delay = UserInput.scanLocalTime("delay");
     boolean trackIsAssigned = UserInput.scanIfTrackIsAssigned();
     TrainDeparture newTrainDeparture;
     if (trackIsAssigned) {
-      int trackNumber = UserInput.scanIntForTrainDeparture("track number");
+      int trackNumber = UserInput.scanInt("track number");
       newTrainDeparture = new TrainDeparture(line, destination,
               trainNumber, departureTime, delay, trackNumber);
-    }
-    else {
+    } else {
       newTrainDeparture = new TrainDeparture(line, destination,
               trainNumber, departureTime, delay);
     }
     trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
   }
+
+  /**
+   * Removes a train departure from the register,
+   * if it is found in register.
+   *
+   */
   private void removeDeparture() {
-    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
+    String trainNumber = UserInput.scanString("train number");
     boolean registered = trainDepartureRegister.checkIfRegistered(trainNumber);
     if (registered) {
       trainDepartureRegister.removeTrainDeparture(trainNumber);
-    }
-    else {
+    } else {
       System.out.println("Train number not found in register.");
     }
   }
-  private void searchTrainNumber(){
-    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
+
+  /**
+   * Searches for a train departure by its train number.
+   */
+  private void searchTrainNumber() {
+    String trainNumber = UserInput.scanString("train number");
     TrainDeparture trainDeparture = trainDepartureRegister.findDepartureByTrainNumber(trainNumber);
     if (trainDeparture != null) {
       printDisplayOverview();
@@ -121,47 +169,65 @@ public class UserInterface {
       System.out.println("Train number not found in register.");
     }
   }
-  private void searchDestination(){
-    String destination = UserInput.scanStringForTrainDeparture("destination");
-    List<TrainDeparture> trainDepartures = trainDepartureRegister.findDeparturesByDestination(destination);
+
+  /**
+   * Searches for train departures by destination.
+   */
+  private void searchDestination() {
+    String destination = UserInput.scanString("destination");
+    List<TrainDeparture> trainDepartures = trainDepartureRegister
+            .findDeparturesByDestination(destination);
     if (!trainDepartures.isEmpty()) {
       printTrainDeparturesList(trainDepartures);
-    }
-    else {
+    } else {
       System.out.println("Could not find any departures to the destination.");
     }
   }
-  private void setNewDelay(){
-    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
+
+  /**
+   * Sets a new delay for a train departure.
+   */
+  private void setNewDelay() {
+    String trainNumber = UserInput.scanString("train number");
     boolean registered = trainDepartureRegister.checkIfRegistered(trainNumber);
     if (registered) {
-      LocalTime delay = UserInput.scanLocalTimeForTrainDeparture("delay");
+      LocalTime delay = UserInput.scanLocalTime("delay");
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
               .setDelay(delay);
-    }
-    else {
+    } else {
       System.out.println("Train number not found in register.");
     }
 
   }
+
+  /**
+   * Sets a new track number for a train departure.
+   */
   private void setNewTrackNumber() {
-    String trainNumber = UserInput.scanStringForTrainDeparture("train number");
+    String trainNumber = UserInput.scanString("train number");
     boolean registered = trainDepartureRegister.checkIfRegistered(trainNumber);
     if (registered) {
-      int trackNumber = UserInput.scanIntForTrainDeparture("track number");
+      int trackNumber = UserInput.scanInt("track number");
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
               .setTrackNumber(trackNumber);
-    }
-    else {
+    } else {
       System.out.println("Train number not found in register.");
     }
 
   }
-  private void endProgram(){
+
+  /**
+   * Ends the program.
+   */
+  private void endProgram() {
     System.out.println("Thanks for using the Train Dispatch App!");
     finished = true;
   }
-  private void printDisplayOverview(){
+
+  /**
+   * Prints the overview of the train departures.
+   */
+  private void printDisplayOverview() {
     int width = 15;
     String tableHeader = String.format(("| %-" + width + "s ").repeat(6) + "|",
             "Departure time:",
@@ -170,14 +236,20 @@ public class UserInterface {
             "Destination:",
             "Track number:",
             "Delay:");
-    System.out.println("|" + "-".repeat(tableHeader.length()/2-3)
+    System.out.println("|" + "-".repeat(tableHeader.length() / 2 - 3)
             + time
-            + "-".repeat(tableHeader.length()/2-3) + "|");
+            + "-".repeat(tableHeader.length() / 2 - 3) + "|");
     System.out.println(tableHeader);
     System.out.println((("| %-" + width + "s ").repeat(6) + "|")
             .replace("%-" + width + "s", "-".repeat(width)));
   }
-  private void printTrainDeparturesList(List<TrainDeparture> listToBePrinted){
+
+  /**
+   * Prints a list of train departures with overlay.
+   *
+   * @param listToBePrinted The list of train departures to be printed.
+   */
+  private void printTrainDeparturesList(List<TrainDeparture> listToBePrinted) {
     printDisplayOverview();
     listToBePrinted.forEach(System.out::println);
   }

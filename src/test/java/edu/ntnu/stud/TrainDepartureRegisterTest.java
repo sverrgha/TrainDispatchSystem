@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,10 @@ public class TrainDepartureRegisterTest {
   @Nested
   @DisplayName("Positive tests for TrainDepartureRegister")
   class PositiveTrainDepartureRegisterTest {
+     @BeforeAll
+    public static void setUp() {
+      System.out.println("Setting up test");
+    }
     @Test
     @DisplayName("checkIfRegistered() should return true if trainNumber is already registered")
     void testCheckIfRegisteredPositive() {

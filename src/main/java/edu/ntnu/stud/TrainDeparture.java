@@ -4,7 +4,10 @@ import java.time.LocalTime;
 
 /**
  * Represents information about a train departure.
+ * Contains two constructors, one if trackNumber is specified/decided and one if not.
+ * constructor verifies that the input is valid, and throws IllegalArgumentException if not.
  * Includes getters for all attributes and setters for delay and trackNumber.
+ * Goal: act as a model for a train departure.
  */
 public class TrainDeparture {
 

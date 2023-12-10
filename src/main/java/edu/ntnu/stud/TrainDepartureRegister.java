@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Represents a register of train departures from a station.
+ * Represents a register with information about train departures departing from one station.
+ * Goal: act as a register for train departures.
  *
  */
 public class TrainDepartureRegister {

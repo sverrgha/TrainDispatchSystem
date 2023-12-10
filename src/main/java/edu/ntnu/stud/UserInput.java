@@ -15,7 +15,8 @@ public class UserInput {
    *
    * @return The string read from the user.
    */
-  public static String scanString() {
+  public static String scanString(String parameter) {
+    System.out.println("Enter the " + parameter + ":");
     String out = "";
     Scanner scanner = new Scanner(System.in);
     while (out.isEmpty()) {
@@ -30,22 +31,12 @@ public class UserInput {
   }
 
   /**
-   * Gives user guidance that a string is supposed to be entered, and runs scanString().
-   *
-   * @param parameter The parameter to read.
-   * @return The string read from the user.
-   */
-  public static String scanStringForTrainDeparture(String parameter) {
-    System.out.println("Enter the " + parameter + ":");
-    return scanString();
-  }
-
-  /**
    * Reads a LocalTime from the user, and ensures that the LocalTime is valid.
    *
    * @return The LocalTime read from the user.
    */
-  public static LocalTime scanLocalTime() {
+  public static LocalTime scanLocalTime(String parameter) {
+    System.out.println("Enter the " + parameter + " (HH:mm):");
     LocalTime out = null;
     Scanner scanner = new Scanner(System.in);
     while (out == null) {
@@ -62,22 +53,12 @@ public class UserInput {
   }
 
   /**
-   * Gives user guidance that a LocalTime is supposed to be entered, and runs scanLocalTime().
-   *
-   * @param parameter The parameter to read.
-   * @return The LocalTime read from the user.
-   */
-  public static LocalTime scanLocalTimeForTrainDeparture(String parameter) {
-    System.out.println("Enter the " + parameter + " (HH:mm):");
-    return scanLocalTime();
-  }
-
-  /**
    * Reads an integer from the user, and ensures that the integer is valid.
    *
    * @return The integer read from the user.
    */
-  public static int scanInt() {
+  public static int scanInt(String parameter) {
+    System.out.println("Enter the " + parameter + ":");
     int out = -1;
     Scanner scanner = new Scanner(System.in);
     while (out < 1) {
@@ -94,17 +75,6 @@ public class UserInput {
       }
     }
     return out;
-  }
-
-  /**
-   * Gives user guidance that an integer is supposed to be entered, and runs scanInt().
-   *
-   * @param parameter The parameter to read.
-   * @return The integer read from the user.
-   */
-  public static int scanIntForTrainDeparture(String parameter) {
-    System.out.println("Enter the " + parameter + ":");
-    return scanInt();
   }
 
   /**

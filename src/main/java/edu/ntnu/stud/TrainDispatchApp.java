@@ -5,11 +5,11 @@ package edu.ntnu.stud;
  * Goal: run the UserInterface, via the main method.
  */
 public class TrainDispatchApp {
-    /**
-     * The main method of the application.
-     *
-     * @param args arguments for the main method.
-     */
+  /**
+   * The main method of the application.
+   *
+   * @param args arguments for the main method.
+   */
   public static void main(String[] args) {
     UserInterface program = new UserInterface();
     program.init();
