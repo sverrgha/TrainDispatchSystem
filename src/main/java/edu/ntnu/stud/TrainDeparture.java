@@ -121,9 +121,9 @@ public class TrainDeparture {
               + parameterName + "' time was null, please retry registration.");
     }
     if (parameterName.equals("delay")) {
-      int maxHours = departureTime.getHour();
-      int maxMin = departureTime.getMinute();
-      if (time.isAfter(LocalTime.of(23, 59))) {
+      int maxHours = 23 - departureTime.getHour();
+      int maxMin = 59 - departureTime.getMinute();
+      if (time.isAfter(LocalTime.of(maxHours, maxMin))) {
         throw new IllegalArgumentException("Delay + departure time must be max 23:59, "
                 + "delay can't be more than" + maxHours + ":" + maxMin);
       }
