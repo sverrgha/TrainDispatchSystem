@@ -5,8 +5,7 @@ import java.util.List;
 
 /**
  * This class contains methods for handling user input.
- * Goal: Handle/interpret input from the user,
- * and use it to interact with the TrainDepartureRegister.
+ * Goal: Handle input from the user.
  */
 public class UserInterface {
   private TrainDepartureRegister trainDepartureRegister;
@@ -117,6 +116,7 @@ public class UserInterface {
       time = newTime;
     }
     trainDepartureRegister.removeDepartedTrains(time);
+    System.out.println("Time was successfully updated to " + time);
   }
 
   /**
@@ -139,6 +139,7 @@ public class UserInterface {
               trainNumber, departureTime, delay);
     }
     trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
+    System.out.println("Train departure was successfully registered.");
   }
 
   /**
@@ -194,6 +195,7 @@ public class UserInterface {
       LocalTime delay = UserInput.scanLocalTime("delay");
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
               .setDelay(delay);
+        System.out.println("Delay was successfully set to " + delay);
     } else {
       System.out.println("Train number not found in register.");
     }
@@ -210,6 +212,7 @@ public class UserInterface {
       int trackNumber = UserInput.scanInt("track number");
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
               .setTrackNumber(trackNumber);
+      System.out.println("Track number was successfully set to " + trackNumber);
     } else {
       System.out.println("Train number not found in register.");
     }
