@@ -243,7 +243,8 @@ public class TrainDeparture {
             line,
             trainNumber,
             destination,
-            ((trackNumber == -1) ? "" : trackNumber),
-            ((delay.equals(LocalTime.MIDNIGHT)) ? "" : delay));
+            ((delay.equals(LocalTime.MIDNIGHT)) ? "" : delay),
+            ((trackNumber == -1) ? "" : trackNumber));
+
   }
 }

@@ -234,8 +234,8 @@ public class UserInterface {
             "Line:",
             "Train number:",
             "Destination:",
-            "Track number:",
-            "Delay:");
+            "Delay:",
+            "Track number:");
     System.out.println("|" + "-".repeat(tableHeader.length() / 2 - 3)
             + time
             + "-".repeat(tableHeader.length() / 2 - 3) + "|");
