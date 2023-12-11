@@ -74,7 +74,6 @@ public class UserInterface {
     System.out.println("7. Set new delay.");
     System.out.println("8. Set new track number");
     System.out.println("9. Exit.\n");
-    System.out.println("Please enter the number corresponding to wanted action:");
   }
 
   /**
@@ -123,23 +122,28 @@ public class UserInterface {
    * Registers a new train departure to the register.
    */
   private void registerTrain() {
-    String line = UserInput.scanString("line");
-    String destination = UserInput.scanString("destination");
     String trainNumber = UserInput.scanString("train number");
-    LocalTime departureTime = UserInput.scanLocalTime("departure time");
-    LocalTime delay = UserInput.scanLocalTime("delay");
-    boolean trackIsAssigned = UserInput.scanIfTrackIsAssigned();
-    TrainDeparture newTrainDeparture;
-    if (trackIsAssigned) {
-      int trackNumber = UserInput.scanInt("track number");
-      newTrainDeparture = new TrainDeparture(line, destination,
-              trainNumber, departureTime, delay, trackNumber);
+    boolean alreadyRegistered = trainDepartureRegister.checkIfRegistered(trainNumber);
+    if (alreadyRegistered) {
+        System.out.println("Train number already registered, returning to main menu...");
     } else {
-      newTrainDeparture = new TrainDeparture(line, destination,
-              trainNumber, departureTime, delay);
+      String line = UserInput.scanString("line");
+      String destination = UserInput.scanString("destination");
+      LocalTime departureTime = UserInput.scanLocalTime("departure time");
+      LocalTime delay = UserInput.scanLocalTime("delay");
+      boolean trackIsAssigned = UserInput.scanIfTrackIsAssigned();
+      TrainDeparture newTrainDeparture;
+      if (trackIsAssigned) {
+        int trackNumber = UserInput.scanInt("track number");
+        newTrainDeparture = new TrainDeparture(line, destination,
+                trainNumber, departureTime, delay, trackNumber);
+      } else {
+        newTrainDeparture = new TrainDeparture(line, destination,
+                trainNumber, departureTime, delay);
+      }
+      trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
+      System.out.println("Train departure was successfully registered.");
     }
-    trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
-    System.out.println("Train departure was successfully registered.");
   }
 
   /**
@@ -152,6 +156,7 @@ public class UserInterface {
     boolean registered = trainDepartureRegister.checkIfRegistered(trainNumber);
     if (registered) {
       trainDepartureRegister.removeTrainDeparture(trainNumber);
+      System.out.println("Train departure was successfully removed.");
     } else {
       System.out.println("Train number not found in register.");
     }

@@ -26,6 +26,14 @@ public class UserInput {
       if (out.isEmpty()) {
         System.out.println("String was empty, please try again.");
       }
+      if (parameter.equalsIgnoreCase("train number")) {
+        try {
+          Integer.parseInt(out);
+        } catch (NumberFormatException e) {
+          System.out.println("Train number could not be read a number, please try again.");
+          out = "";
+        }
+      }
     }
     return out;
   }
