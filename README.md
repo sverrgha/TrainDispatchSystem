@@ -11,7 +11,7 @@ This project has its non-test files in the package src/main/java/edu/ntnu/stud, 
 
 ## Link to repository
 
-git repository can be found [here]https://gitlab.stud.idi.ntnu.no/sverrgha/traindispatchsystem
+git repository can be found [[here]](https://gitlab.stud.idi.ntnu.no/sverrgha/traindispatchsystem)
 
 ## How to run the project
 
