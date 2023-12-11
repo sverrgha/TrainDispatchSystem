@@ -16,7 +16,7 @@ public class UserInput {
    * @return The string read from the user.
    */
   public static String scanString(String parameter) {
-    System.out.println("Enter the " + parameter + ":");
+    System.out.println("Enter " + parameter + ":");
     String out = "";
     Scanner scanner = new Scanner(System.in);
     while (out.isEmpty()) {
@@ -44,7 +44,7 @@ public class UserInput {
    * @return The LocalTime read from the user.
    */
   public static LocalTime scanLocalTime(String parameter) {
-    System.out.println("Enter the " + parameter + " (HH:mm):");
+    System.out.println("Enter " + parameter + " (HH:mm):");
     LocalTime out = null;
     Scanner scanner = new Scanner(System.in);
     while (out == null) {
@@ -66,7 +66,7 @@ public class UserInput {
    * @return The integer read from the user.
    */
   public static int scanInt(String parameter) {
-    System.out.println("Enter the " + parameter + ":");
+    System.out.println("Enter " + parameter + ":");
     int out = -1;
     Scanner scanner = new Scanner(System.in);
     while (out < 1) {

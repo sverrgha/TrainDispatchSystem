@@ -125,7 +125,7 @@ public class UserInterface {
     String trainNumber = UserInput.scanString("train number");
     boolean alreadyRegistered = trainDepartureRegister.checkIfRegistered(trainNumber);
     if (alreadyRegistered) {
-        System.out.println("Train number already registered, returning to main menu...");
+      System.out.println("Train number already registered, returning to main menu...");
     } else {
       String line = UserInput.scanString("line");
       String destination = UserInput.scanString("destination");
@@ -200,7 +200,7 @@ public class UserInterface {
       LocalTime delay = UserInput.scanLocalTime("delay");
       trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
               .setDelay(delay);
-        System.out.println("Delay was successfully set to " + delay);
+      System.out.println("Delay was successfully set to " + delay);
     } else {
       System.out.println("Train number not found in register.");
     }

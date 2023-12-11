@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalTime;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,16 +13,16 @@ import org.junit.jupiter.api.Test;
  * This class contains tests for the TrainDeparture class.
  */
 public class TrainDepartureTest {
-  static String line;
-  static String destination;
-  static String trainNumber;
-  static LocalTime departureTime;
-  static LocalTime delay;
-  static int trackNumber;
+  String line;
+  String destination;
+  String trainNumber;
+  LocalTime departureTime;
+  LocalTime delay;
+  int trackNumber;
 
-  @BeforeAll
+  @BeforeEach
   @DisplayName("Set up TrainDeparture-parameters")
-  static void setUp() {
+  void setUp() {
     line = "Line A";
     destination = "Destination X";
     trainNumber = "12345";
