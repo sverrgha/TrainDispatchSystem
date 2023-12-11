@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,18 +18,27 @@ import org.junit.jupiter.api.Test;
  * This class contains tests for the TrainDepartureRegister class.
  */
 public class TrainDepartureRegisterTest {
+  private TrainDepartureRegister register;
+  private TrainDeparture baseDeparture;
+
+  @BeforeEach
+  @DisplayName("Set up TrainDepartureRegister and TrainDeparture")
+  void setUp() {
+    register = new TrainDepartureRegister();
+    baseDeparture = new TrainDeparture(
+            "Line X", "Destination Y", "123",
+            LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
+  }
+
   @Nested
   @DisplayName("Positive tests for TrainDepartureRegister")
   class PositiveTrainDepartureRegisterTest {
     @Test
     @DisplayName("checkIfRegistered() should return true if trainNumber is already registered")
     void testCheckIfRegisteredPositive() {
-      TrainDepartureRegister trainDepartureRegister = new TrainDepartureRegister();
-      TrainDeparture newTrainDeparture = new TrainDeparture("Line1", "Dest1",
-              "123", LocalTime.now(), LocalTime.now());
-      trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
+      register.registerTrainDeparture(baseDeparture);
 
-      boolean isRegistered = trainDepartureRegister.checkIfRegistered("123");
+      boolean isRegistered = register.checkIfRegistered(baseDeparture.getTrainNumber());
 
       assertTrue(isRegistered);
     }
@@ -36,13 +46,8 @@ public class TrainDepartureRegisterTest {
     @Test
     @DisplayName("checkIfRegistered() should return false if trainNumber is not already registered")
     void testCheckIfRegisteredFalse() {
-      // Assuming trainDepartures has TrainDeparture objects
-      TrainDepartureRegister trainDepartureRegister = new TrainDepartureRegister();
-      TrainDeparture newTrainDeparture = new TrainDeparture("Line1", "Dest1",
-              "123", LocalTime.now(), LocalTime.now());
-      trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
-
-      boolean isRegistered = trainDepartureRegister.checkIfRegistered("321");
+      register.registerTrainDeparture(baseDeparture);
+      boolean isRegistered = register.checkIfRegistered(baseDeparture.getTrainNumber() + "1");
 
       assertFalse(isRegistered);
     }
@@ -50,54 +55,38 @@ public class TrainDepartureRegisterTest {
     @Test
     @DisplayName("registerTrainDeparture() actually registers the train departure")
     public void testRegisterTrainDeparture() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture = new TrainDeparture(
-              "Line X", "Destination Y", "12345",
-              LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
-      register.registerTrainDeparture(newDeparture);
-      TrainDeparture retrievedDeparture = register.findDepartureByTrainNumber("12345");
+      register.registerTrainDeparture(baseDeparture);
+      TrainDeparture retrievedDeparture = register
+              .findDepartureByTrainNumber(baseDeparture.getTrainNumber());
       assertNotNull(retrievedDeparture);
-      assertEquals(newDeparture, retrievedDeparture);
+      assertEquals(baseDeparture, retrievedDeparture);
     }
 
     @Test
     @DisplayName("removeTrainDeparture() removes train departure with specified train number")
     public void testRemoveTrainDeparturePositive() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture = new TrainDeparture(
-              "Line X", "Destination Y", "123",
-              LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
+      register.registerTrainDeparture(baseDeparture);
+      register.removeTrainDeparture(baseDeparture.getTrainNumber());
 
-      register.registerTrainDeparture(newDeparture);
-      register.removeTrainDeparture("123");
-
-      assertNull(register.findDepartureByTrainNumber("12345"));
+      assertNull(register.findDepartureByTrainNumber(baseDeparture.getTrainNumber()));
     }
 
     @Test
     @DisplayName("findDepartureByTrainNumber() returns the correct train departure")
     public void testFindDepartureByTrainNumberCorrect() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture = new TrainDeparture(
-              "Line X", "Destination Y", "123",
-              LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
+      register.registerTrainDeparture(baseDeparture);
+      TrainDeparture retrievedDeparture = register
+              .findDepartureByTrainNumber(baseDeparture.getTrainNumber());
 
-      register.registerTrainDeparture(newDeparture);
-      TrainDeparture retrievedDeparture = register.findDepartureByTrainNumber("123");
-
-      assertEquals(newDeparture, retrievedDeparture);
+      assertEquals(baseDeparture, retrievedDeparture);
     }
 
     @Test
     @DisplayName("findDeparturesByTrainNumber() returns null if no train departures are found")
     public void testFindDeparturesByTrainNumberNull() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture = new TrainDeparture(
-              "Line X", "Destination Y", "123",
-              LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
-
-      register.registerTrainDeparture(newDeparture);
-      TrainDeparture retrievedDeparture = register.findDepartureByTrainNumber("321");
+      register.registerTrainDeparture(baseDeparture);
+      TrainDeparture retrievedDeparture = register
+              .findDepartureByTrainNumber(baseDeparture.getTrainNumber() + "1");
 
       assertNull(retrievedDeparture);
     }
@@ -105,23 +94,20 @@ public class TrainDepartureRegisterTest {
     @Test
     @DisplayName("findDeparturesByDestination() returns the correct train departures")
     public void testFindDeparturesByDestinationCorrect() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture1 = new TrainDeparture(
-              "Line X", "Destination Y", "123",
-              LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
-      TrainDeparture newDeparture2 = new TrainDeparture(
-              "Line X", "Destination Y", "321",
+
+      TrainDeparture newDeparture = new TrainDeparture(
+              "Line X", baseDeparture.getDestination(), "321",
               LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
 
-      register.registerTrainDeparture(newDeparture1);
-      register.registerTrainDeparture(newDeparture2);
+      register.registerTrainDeparture(baseDeparture);
+      register.registerTrainDeparture(newDeparture);
 
 
       List<TrainDeparture> newDepartures = new ArrayList<>();
-      newDepartures.add(newDeparture1);
-      newDepartures.add(newDeparture2);
+      newDepartures.add(baseDeparture);
+      newDepartures.add(newDeparture);
       List<TrainDeparture> retrievedDepartures = register
-              .findDeparturesByDestination("Destination Y");
+              .findDeparturesByDestination(baseDeparture.getDestination());
 
       assertEquals(newDepartures, retrievedDepartures);
     }
@@ -130,16 +116,12 @@ public class TrainDepartureRegisterTest {
     @DisplayName("findDeparturesByDestination() returns empty "
             + "list if no train departures are found")
     public void testFindDeparturesByDestinationEmpty() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture1 = new TrainDeparture(
-              "Line X", "Destination Y", "123",
-              LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
-      TrainDeparture newDeparture2 = new TrainDeparture(
+      TrainDeparture newDeparture = new TrainDeparture(
               "Line X", "Destination Y", "321",
               LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
 
-      register.registerTrainDeparture(newDeparture1);
-      register.registerTrainDeparture(newDeparture2);
+      register.registerTrainDeparture(baseDeparture);
+      register.registerTrainDeparture(newDeparture);
 
       List<TrainDeparture> retrievedDepartures = register
               .findDeparturesByDestination("Destination Z");
@@ -150,56 +132,43 @@ public class TrainDepartureRegisterTest {
     @Test
     @DisplayName("removeDepartedTrains() removes all trains that have departed")
     public void testRemoveDepartedTrainsRemoved() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture1 = new TrainDeparture(
-              "Line X", "Destination Y", "123",
-              LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
-      TrainDeparture newDeparture2 = new TrainDeparture(
-              "Line X", "Destination Y", "321",
+      TrainDeparture newDeparture = new TrainDeparture(
+              "Line X", baseDeparture.getDestination(), "321",
               LocalTime.of(9, 15), LocalTime.of(0, 0), 5);
 
-      register.registerTrainDeparture(newDeparture1);
-      register.registerTrainDeparture(newDeparture2);
+      register.registerTrainDeparture(baseDeparture);
+      register.registerTrainDeparture(newDeparture);
 
       register.removeDepartedTrains(LocalTime.of(9, 16));
 
-      assertTrue(register.findDeparturesByDestination("Destination Y").isEmpty());
+      assertTrue(register.findDeparturesByDestination(baseDeparture.getDestination()).isEmpty());
     }
 
     @Test
     @DisplayName("removeDepartedTrains() does not remove trains that have not departed")
     public void testRemoveDepartedTrainsNotRemoved() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture = new TrainDeparture(
-              "Line X", "Destination Y", "123",
-              LocalTime.of(9, 0), LocalTime.of(0, 15), 3);
-
-      register.registerTrainDeparture(newDeparture);
+      register.registerTrainDeparture(baseDeparture);
 
       register.removeDepartedTrains(LocalTime.of(9, 15));
 
-      assertNotNull(register.findDepartureByTrainNumber("123"));
+      assertNotNull(register.findDepartureByTrainNumber(baseDeparture.getTrainNumber()));
     }
 
     @Test
     @DisplayName("sortByDepartureTime() sorts the list of train "
             + "departures by their scheduled departure time ignoring delay")
     public void testSortByDepartureTime() {
-      TrainDepartureRegister register = new TrainDepartureRegister();
-      TrainDeparture newDeparture1 = new TrainDeparture(
-              "Line X", "Destination Y", "123",
-              LocalTime.of(9, 0), LocalTime.of(0, 0), 3);
-      TrainDeparture newDeparture2 = new TrainDeparture(
+      TrainDeparture newDeparture = new TrainDeparture(
               "Line X", "Destination Y", "321",
               LocalTime.of(9, 15), LocalTime.of(0, 0), 5);
 
-      register.registerTrainDeparture(newDeparture2);
-      register.registerTrainDeparture(newDeparture1);
+      register.registerTrainDeparture(newDeparture);
+      register.registerTrainDeparture(baseDeparture);
 
       List<TrainDeparture> sortedDepartures = register.sortByDepartureTime();
 
-      assertEquals(newDeparture1, sortedDepartures.get(0));
-      assertEquals(newDeparture2, sortedDepartures.get(1));
+      assertEquals(baseDeparture, sortedDepartures.get(0));
+      assertEquals(newDeparture, sortedDepartures.get(1));
     }
   }
 
@@ -210,15 +179,11 @@ public class TrainDepartureRegisterTest {
     @DisplayName("registerTrainDeparture throws 'Ill.Arg.Exc.' on duplicate trainNumber")
     public void testRegisterDuplicateTrainNumber() {
       try {
-        TrainDepartureRegister register = new TrainDepartureRegister();
-        TrainDeparture departure1 = new TrainDeparture(
-                "Line A", "Destination X", "54321",
-                LocalTime.of(10, 0), LocalTime.of(0, 20), 5);
-        TrainDeparture departure2 = new TrainDeparture(
-                "Line B", "Destination Y", "54321",
+        TrainDeparture newDeparture = new TrainDeparture(
+                "Line B", "Destination Y", baseDeparture.getTrainNumber(),
                 LocalTime.of(11, 0), LocalTime.of(0, 25), 7);
-        register.registerTrainDeparture(departure1);
-        register.registerTrainDeparture(departure2);
+        register.registerTrainDeparture(baseDeparture);
+        register.registerTrainDeparture(newDeparture);
       } catch (IllegalArgumentException e) {
         assertEquals("Train number already registered. "
                 + "Please retry registration.", e.getMessage());

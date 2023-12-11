@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalTime;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,39 +13,44 @@ import org.junit.jupiter.api.Test;
  * This class contains tests for the TrainDeparture class.
  */
 public class TrainDepartureTest {
+  static String line;
+  static String destination;
+  static String trainNumber;
+  static LocalTime departureTime;
+  static LocalTime delay;
+  static int trackNumber;
+
+  @BeforeAll
+  @DisplayName("Set up TrainDeparture-parameters")
+  static void setUp() {
+    line = "Line A";
+    destination = "Destination X";
+    trainNumber = "12345";
+    departureTime = LocalTime.of(10, 30);
+    delay = LocalTime.of(0, 15);
+    trackNumber = 2;
+  }
 
   @Nested
-    @DisplayName("Positive tests for TrainDeparture")
-    class PositiveTrainDepartureTest {
+  @DisplayName("Positive tests for TrainDeparture")
+  class PositiveTrainDepartureTest {
     @Test
     @DisplayName("Test valid TrainDeparture construction with track number")
     public void testValidTrainDepartureConstructionWithTrackNumber() {
-      String line = "Line A";
-      String destination = "Destination X";
-      String trainNumber = "12345";
-      LocalTime departureTime = LocalTime.of(10, 30);
-      LocalTime delay = LocalTime.of(0, 15);
-      int track = 3;
-
       TrainDeparture departure = new TrainDeparture(line, destination,
-              trainNumber, departureTime, delay, track);
+              trainNumber, departureTime, delay, trackNumber);
 
       assertEquals(line, departure.getLine());
       assertEquals(destination, departure.getDestination());
       assertEquals(trainNumber, departure.getTrainNumber());
       assertEquals(departureTime, departure.getDepartureTime());
       assertEquals(delay, departure.getDelay());
-      assertEquals(track, departure.getTrackNumber());
+      assertEquals(trackNumber, departure.getTrackNumber());
     }
+
     @Test
     @DisplayName("Test valid TrainDeparture construction without track number")
     public void testValidTrainDepartureConstructionWithoutTrackNumber() {
-      String line = "Line A";
-      String destination = "Destination X";
-      String trainNumber = "12345";
-      LocalTime departureTime = LocalTime.of(10, 30);
-      LocalTime delay = LocalTime.of(0, 15);
-
       TrainDeparture departure = new TrainDeparture(line, destination,
               trainNumber, departureTime, delay);
 
@@ -55,36 +61,32 @@ public class TrainDepartureTest {
       assertEquals(delay, departure.getDelay());
       assertEquals(-1, departure.getTrackNumber());
     }
+
     @Test
     @DisplayName("Test valid departureTimeWithDelay() with delay")
     public void testDepartureTimeWithDelay() {
-      TrainDeparture trainDeparture = new TrainDeparture("A1", "Oslo",
-              "161", LocalTime.of(12, 45), LocalTime.of(0, 0), 2);
+      TrainDeparture trainDeparture = new TrainDeparture(line, destination,
+              trainNumber, departureTime, delay, trackNumber);
 
-      LocalTime expectedTimeWithDelay = LocalTime.of(12, 45);
+      LocalTime expectedTimeWithDelay = LocalTime.of(10, 45);
 
       assertEquals(expectedTimeWithDelay, trainDeparture.departureTimeWithDelay());
     }
+
     @Test
     @DisplayName("Test valid departureTimeWithDelay() without delay")
     public void testDepartureTimeWithDelayWithoutDelay() {
-      TrainDeparture trainDeparture = new TrainDeparture("A1", "Oslo",
-              "161", LocalTime.of(12, 45), LocalTime.of(0, 0), 2);
+      TrainDeparture trainDeparture = new TrainDeparture(line, destination,
+              trainNumber, departureTime, LocalTime.of(0, 0), trackNumber);
 
-      LocalTime expectedTimeWithDelay = LocalTime.of(12, 45);
+      LocalTime expectedTimeWithDelay = LocalTime.of(10, 30);
 
       assertEquals(expectedTimeWithDelay, trainDeparture.departureTimeWithDelay());
     }
+
     @Test
     @DisplayName("Test valid toString() with delay and trackNumber")
     public void testToStringWithDelayAndTrackNumber() {
-      String line = "Line A";
-      String destination = "Destination X";
-      String trainNumber = "12345";
-      LocalTime departureTime = LocalTime.of(10, 30);
-      LocalTime delay = LocalTime.of(0, 15);
-      int trackNumber = 3;
-
       TrainDeparture departure = new TrainDeparture(line, destination,
               trainNumber, departureTime, delay, trackNumber);
 
@@ -98,17 +100,12 @@ public class TrainDepartureTest {
 
       assertEquals(expectedOutput, departure.toString());
     }
-    @Test
-    @DisplayName("Test valid toString() without delay and trackNumber")
-    public void testToStringWithoutDelayAndTrackNumber() {
-      String line = "Line A";
-      String destination = "Destination X";
-      String trainNumber = "12345";
-      LocalTime departureTime = LocalTime.of(10, 30);
-      LocalTime delay = LocalTime.of(0, 0);
 
+    @Test
+    @DisplayName("Test valid toString() without zero delay and no trackNumber")
+    public void testToStringWithoutDelayAndTrackNumber() {
       TrainDeparture departure = new TrainDeparture(line, destination,
-              trainNumber, departureTime, delay);
+              trainNumber, departureTime, LocalTime.of(0, 0));
 
       String expectedOutput = String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |",
               departureTime,
@@ -116,7 +113,7 @@ public class TrainDepartureTest {
               trainNumber,
               destination,
               "",
-              ((delay.equals(LocalTime.MIDNIGHT)) ? "" : delay));
+              "");
 
       assertEquals(expectedOutput, departure.toString());
     }
@@ -128,101 +125,57 @@ public class TrainDepartureTest {
     @Test
     @DisplayName("Test invalid TrainDeparture construction with blank line")
     public void testInvalidTrainDepartureConstructionBlankLine() {
-      String line = "";
-      String destination = "Destination Y";
-      String trainNumber = "54321";
-      LocalTime departureTime = LocalTime.of(8, 0);
-      LocalTime delay = LocalTime.of(0, 10);
-      int track = 5;
 
       assertThrows(IllegalArgumentException.class, () ->
-              new TrainDeparture(line, destination, trainNumber, departureTime, delay, track));
+              new TrainDeparture("", destination, trainNumber, departureTime, delay, trackNumber));
     }
 
     @Test
     @DisplayName("Test invalid TrainDeparture construction with blank destination")
     public void testInvalidTrainDepartureConstructionBlankDestination() {
-      String line = "Line B";
-      String destination = "";
-      String trainNumber = "67890";
-      LocalTime departureTime = LocalTime.of(12, 45);
-      LocalTime delay = LocalTime.of(0, 10);
-      int track = 5;
-
       assertThrows(IllegalArgumentException.class, () ->
-              new TrainDeparture(line, destination, trainNumber, departureTime, delay, track));
+              new TrainDeparture(line, "", trainNumber, departureTime, delay, trackNumber));
     }
 
     @Test
     @DisplayName("Test invalid TrainDeparture construction with blank train number")
     public void testInvalidTrainDepartureConstructionBlankTrainNumber() {
-      String line = "Line B";
-      String destination = "Destination Z";
-      String trainNumber = "";
-      LocalTime departureTime = LocalTime.of(12, 45);
-      LocalTime delay = LocalTime.of(0, 10);
-      int track = 5;
-
       assertThrows(IllegalArgumentException.class, () ->
-              new TrainDeparture(line, destination, trainNumber, departureTime, delay, track));
+              new TrainDeparture(line, destination, "", departureTime, delay, trackNumber));
     }
 
     @Test
     @DisplayName("Test invalid TrainDeparture construction with null departure time")
     public void testInvalidTrainDepartureConstructionNullDepartureTime() {
-      String line = "Line B";
-      String destination = "Destination Z";
-      String trainNumber = "67890";
-      LocalTime departureTime = null;
-      LocalTime delay = LocalTime.of(0, 10);
-      int track = 5;
-
       assertThrows(IllegalArgumentException.class, () ->
-              new TrainDeparture(line, destination, trainNumber, departureTime, delay, track));
+              new TrainDeparture(line, destination, trainNumber, null, delay, trackNumber));
 
     }
 
     @Test
     @DisplayName("Test invalid TrainDeparture construction with null delay")
     public void testInvalidTrainDepartureConstructionNullDelay() {
-      String line = "Line B";
-      String destination = "Destination Z";
-      String trainNumber = "67890";
-      LocalTime departureTime = LocalTime.of(12, 45);
-      LocalTime delay = null;
 
       assertThrows(IllegalArgumentException.class, () ->
-              new TrainDeparture(line, destination, trainNumber, departureTime, delay));
+              new TrainDeparture(line, destination, trainNumber, departureTime, null));
     }
+
     @Test
-    @DisplayName("Test invalid TrainDeparture construction with departure time plus delay more than 23:59")
+    @DisplayName("Test invalid TrainDeparture construction with "
+            + "departure time plus delay more than 23:59")
     public void testInvalidTrainDepartureConstructionInvalidDelay() {
-      String line = "Line B";
-      String destination = "Destination Z";
-      String trainNumber = "67890";
-      LocalTime departureTime = LocalTime.of(12, 45);
-      LocalTime delay = LocalTime.of(12, 45);
-
       assertThrows(IllegalArgumentException.class, () ->
-              new TrainDeparture(line, destination, trainNumber, departureTime, delay));
+              new TrainDeparture(line, destination, trainNumber,
+                      departureTime, LocalTime.of(23, 59)));
     }
 
     @Test
-    @DisplayName("Test invalid TrainDeparture construction with negative track number")
+    @DisplayName("Test invalid TrainDeparture construction "
+            + "with negative track number")
     public void testInvalidTrainDepartureConstructionInvalidTrack() {
-      String line = "Line C";
-      String destination = "Destination W";
-      String trainNumber = "13579";
-      LocalTime departureTime = LocalTime.of(15, 20);
-      LocalTime delay = LocalTime.of(0, 5);
-      int track = -2;
 
       assertThrows(IllegalArgumentException.class, () ->
-              new TrainDeparture(line, destination, trainNumber, departureTime, delay, track));
+              new TrainDeparture(line, destination, trainNumber, departureTime, delay, -2));
     }
-
-
-
-
   }
 }
