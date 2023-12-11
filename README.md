@@ -1,31 +1,25 @@
 # Portfolio project IDATA1003 - 2023
-This file uses Mark Down syntax. For more information see [here](https://www.markdownguide.org/basic-syntax/).
-
-STUDENT NAME = "Your name"  
-STUDENT ID = "Your ID"
+Candidate number = "10071"  
 
 ## Project description
 
-[//]: # (TODO: Write a short description of your project/product here.)
+This project is an application that has the purpose of being a simplified system for handeling traindeparures from one trainstation.
 
 ## Project structure
 
-[//]: # (TODO: Describe the structure of your project here. How have you used packages in your structure. Where are all sourcefiles stored. Where are all JUnit-test classes stored. etc.)
+This project has its non-test files in the package src/main/java/edu/ntnu/stud, while testfiles is in the package  src/test/java/edu/ntnu/stud
 
 ## Link to repository
 
-[//]: # (TODO: Include a link to your repository here.)
+git repository can be found [here]https://gitlab.stud.idi.ntnu.no/sverrgha/traindispatchsystem
 
 ## How to run the project
 
-[//]: # (TODO: Describe how to run your project here. What is the main class? What is the main method?
-What is the input and output of the program? What is the expected behaviour of the program?)
+The program is run by running the file TrainDispatchApp.java in src/main/java/edu/ntnu/stud. 
+When the program is run it should start by printing out a menu of actions in the terminal, and wait for input for users choice of action. 
 
 ## How to run the tests
 
-[//]: # (TODO: Describe how to run the tests here.)
+To run the tests you need to run the two test-files: TrainDepartureTest and TrainDepartureRegisterTest. They are both located in src/test/java/edu/ntnu/stud. 
 
-## References
 
-[//]: # (TODO: Include references here, if any. For example, if you have used code from the course book, include a reference to the chapter.
-Or if you have used code from a website or other source, include a link to the source.)
