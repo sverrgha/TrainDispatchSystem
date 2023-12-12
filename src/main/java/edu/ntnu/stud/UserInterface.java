@@ -134,16 +134,20 @@ public class UserInterface {
       LocalTime delay = UserInput.scanLocalTime("delay");
       boolean trackIsAssigned = UserInput.scanIfTrackIsAssigned();
       TrainDeparture newTrainDeparture;
-      if (trackIsAssigned) {
-        int trackNumber = UserInput.scanInt("track number");
-        newTrainDeparture = new TrainDeparture(line, destination,
-                trainNumber, departureTime, delay, trackNumber);
-      } else {
-        newTrainDeparture = new TrainDeparture(line, destination,
-                trainNumber, departureTime, delay);
+      try {
+        if (trackIsAssigned) {
+          int trackNumber = UserInput.scanInt("track number");
+          newTrainDeparture = new TrainDeparture(line, destination,
+                  trainNumber, departureTime, delay, trackNumber);
+        } else {
+          newTrainDeparture = new TrainDeparture(line, destination,
+                  trainNumber, departureTime, delay);
+        }
+        trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
+        System.out.println("Train departure was successfully registered.");
+      } catch (IllegalArgumentException e) {
+          System.out.println(e.getMessage());
       }
-      trainDepartureRegister.registerTrainDeparture(newTrainDeparture);
-      System.out.println("Train departure was successfully registered.");
     }
   }
 
