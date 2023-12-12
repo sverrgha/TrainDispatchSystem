@@ -92,7 +92,7 @@ public class UserInterface {
       case SET_NEW_DELAY -> setNewDelay();
       case SET_NEW_TRACK_NUMBER -> setNewTrackNumber();
       case EXIT_PROGRAM -> endProgram();
-      default -> System.out.println("Invalid input! Please enter a valid number.");
+      default -> System.out.println("Invalid input. Please enter a valid number.");
     }
   }
 
@@ -113,9 +113,10 @@ public class UserInterface {
               + "Nothing changed.");
     } else {
       time = newTime;
+      System.out.println("Time was successfully updated to " + time);
     }
     trainDepartureRegister.removeDepartedTrains(time);
-    System.out.println("Time was successfully updated to " + time);
+
   }
 
   /**
@@ -158,7 +159,7 @@ public class UserInterface {
       trainDepartureRegister.removeTrainDeparture(trainNumber);
       System.out.println("Train departure was successfully removed.");
     } else {
-      System.out.println("Train number not found in register.");
+      System.out.println("Train number not found in register, returning to main menu...");
     }
   }
 
@@ -172,7 +173,7 @@ public class UserInterface {
       printDisplayOverview();
       System.out.println(trainDeparture);
     } else {
-      System.out.println("Train number not found in register.");
+      System.out.println("Train number not found in register, returning to main menu...");
     }
   }
 
@@ -186,7 +187,8 @@ public class UserInterface {
     if (!trainDepartures.isEmpty()) {
       printTrainDeparturesList(trainDepartures);
     } else {
-      System.out.println("Could not find any departures to the destination.");
+      System.out.println("Could not find any departures to the destination, "
+              + "returning to main menu...");
     }
   }
 
@@ -206,7 +208,7 @@ public class UserInterface {
         System.out.println(e.getMessage());
       }
     } else {
-      System.out.println("Train number not found in register.");
+      System.out.println("Train number not found in register, returning to main menu...");
     }
 
   }
@@ -223,7 +225,7 @@ public class UserInterface {
               .setTrackNumber(trackNumber);
       System.out.println("Track number was successfully set to " + trackNumber);
     } else {
-      System.out.println("Train number not found in register.");
+      System.out.println("Train number not found in register, returning to main menu...");
     }
 
   }
