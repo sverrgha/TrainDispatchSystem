@@ -198,9 +198,13 @@ public class UserInterface {
     boolean registered = trainDepartureRegister.checkIfRegistered(trainNumber);
     if (registered) {
       LocalTime delay = UserInput.scanLocalTime("delay");
-      trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
-              .setDelay(delay);
-      System.out.println("Delay was successfully set to " + delay);
+      try {
+        trainDepartureRegister.findDepartureByTrainNumber(trainNumber)
+                .setDelay(delay);
+        System.out.println("Delay was successfully set to " + delay);
+      } catch (IllegalArgumentException e) {
+        System.out.println(e.getMessage());
+      }
     } else {
       System.out.println("Train number not found in register.");
     }

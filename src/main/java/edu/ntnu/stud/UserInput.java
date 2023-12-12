@@ -71,10 +71,10 @@ public class UserInput {
     Scanner scanner = new Scanner(System.in);
     while (out < 1) {
       if (scanner.hasNextInt()) {
-          out = scanner.nextInt();
-          if (out < 1) {
-            System.out.println("Number must be 1 or higher, please try again.");
-          }
+        out = scanner.nextInt();
+        if (out < 1) {
+          System.out.println("Number must be 1 or higher, please try again.");
+        }
       } else {
         System.out.println("Input must be a number, please try again.");
         scanner.next();

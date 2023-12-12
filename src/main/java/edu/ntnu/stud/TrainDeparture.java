@@ -125,7 +125,7 @@ public class TrainDeparture {
       int maxMin = 59 - departureTime.getMinute();
       if (time.isAfter(LocalTime.of(maxHours, maxMin))) {
         throw new IllegalArgumentException("Delay + departure time must be max 23:59, "
-                + "delay can't be more than" + maxHours + ":" + maxMin);
+                + "delay can't be more than " + maxHours + ":" + maxMin);
       }
     }
   }
